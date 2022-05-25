@@ -1,0 +1,56 @@
+### cria uma conta
+POST http://localhost:3333/account HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Joana Alves",
+  "cpf": "024.658.982-47"
+}
+
+### atualiza uma conta
+PUT http://localhost:3333/account HTTP/1.1
+content-type: application/json
+cpf: 024.658.982-47
+
+{
+  "name": "Joana Alves da Silva"
+}
+
+### deleta uma conta
+DELETE http://localhost:3333/account HTTP/1.1
+cpf: 024.658.982-47
+
+### cria um depósito
+POST http://localhost:3333/deposit HTTP/1.1
+content-type: application/json
+cpf: 024.658.982-47
+
+{
+  "description": "Bônus",
+  "amount": 100
+}
+
+### cria um saque
+POST http://localhost:3333/withdraw HTTP/1.1
+content-type: application/json
+cpf: 024.658.982-47
+
+{
+  "description": "Padaria",
+  "amount": 60
+}
+
+### retorna todas contas
+GET http://localhost:3333/accounts HTTP/1.1
+
+### retorna as transferencias do CPF
+GET http://localhost:3333/statement HTTP/1.1
+cpf: 024.658.982-47
+
+### retorna as transferencias do CPF para uma data
+GET http://localhost:3333/statement/date?date=2022-05-25 HTTP/1.1
+cpf: 024.658.982-47
+
+### retorna o saldo do CPF
+GET http://localhost:3333/balance HTTP/1.1
+cpf: 024.658.982-47
