@@ -28,7 +28,7 @@ Essa será uma aplicação onde o seu principal objetivo é uma pequena aplic
 - Listar as transações de uma conta
 - Listar as transações de uma conta por data
 
-# Como rodar o projeto
+## Como rodar o projeto
 
 Após clonar o repositório e acessar a pasta do projeto, execute os comandos:
 
