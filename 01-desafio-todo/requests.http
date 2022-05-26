@@ -1,0 +1,40 @@
+### creates the user
+POST http://localhost:3333/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "username": "johndoe"
+}
+
+### get the user's todos
+GET http://localhost:3333/todos HTTP/1.1
+username: johndoe
+
+### creates a todo
+POST http://localhost:3333/todos HTTP/1.1
+Content-Type: application/json
+username: johndoe
+
+{
+  "title": "Do something",
+  "deadline": "2022-06-01"
+}
+
+### update a todo
+PUT http://localhost:3333/todos/50e73480-9d27-4b71-9d24-d4d7114bb409 HTTP/1.1
+Content-Type: application/json
+username: johndoe
+
+{
+  "title": "Do something else",
+  "deadline": "2022-07-11"
+}
+
+### update a todo status
+PATCH http://localhost:3333/todos/50e73480-9d27-4b71-9d24-d4d7114bb409/done HTTP/1.1
+username: johndoe
+
+### delete a todo
+DELETE http://localhost:3333/todos/df780582-de4c-492c-b83a-357e29e34849 HTTP/1.1
+username: johndoe
