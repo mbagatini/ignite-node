@@ -1,4 +1,4 @@
-import { CategoryRepository } from "../repositories/CategoryRepository";
+import { ICategoryRepository } from "../repositories/ICategoryRepository";
 
 interface IRequestDTO {
 	name: string;
@@ -6,10 +6,10 @@ interface IRequestDTO {
 }
 
 class CreateCategoryService {
-	// DIP
-	private categoryRepository: CategoryRepository;
+	// DIP and Liskov Substitution Principle
+	private categoryRepository: ICategoryRepository;
 
-	constructor(categoryRepository: CategoryRepository) {
+	constructor(categoryRepository: ICategoryRepository) {
 		this.categoryRepository = categoryRepository;
 	}
 
