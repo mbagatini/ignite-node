@@ -6,3 +6,6 @@ Content-Type: application/json
   "name": "SUV",
   "description": "Cars with a lot of space"
 }
+
+### list the categories
+GET http://localhost:3333/categories
