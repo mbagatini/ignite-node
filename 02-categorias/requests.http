@@ -1,11 +1,25 @@
+### CATEGORIES
 ### create a category
 POST http://localhost:3333/categories
 Content-Type: application/json
 
 {
-  "name": "Hatch",
+  "name": "SUV",
   "description": "Cars with a lot of space"
 }
 
 ### list the categories
 GET http://localhost:3333/categories
+
+### SPECIFICATION
+### create a specification
+POST http://localhost:3333/specifications
+Content-Type: application/json
+
+{
+  "name": "Air conditioning",
+  "description": "Air conditioning"
+}
+
+### list the specifications
+GET http://localhost:3333/specifications
