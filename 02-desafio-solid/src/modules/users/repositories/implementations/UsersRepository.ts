@@ -39,6 +39,7 @@ class UsersRepository implements IUsersRepository {
 		const index = this.users.findIndex((user) => user.id === receivedUser.id);
 
 		this.users[index].admin = true;
+		this.users[index].updated_at = new Date();
 
 		return this.users[index];
 	}
