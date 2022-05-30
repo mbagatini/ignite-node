@@ -25,6 +25,8 @@ class ImportCategoriesUseCase {
 				const [name, description] = line;
 				categories.push({ name, description });
 			}).on("end", () => {
+				// Remove file from tmp folder
+				fs.promises.unlink(file.path);
 				resolve(categories);
 			}).on("error", (err) => {
 				reject(err);
