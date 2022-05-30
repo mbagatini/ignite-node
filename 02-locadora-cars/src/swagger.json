@@ -4,5 +4,88 @@
 		"title": "RentalX Documentation",
 		"description": "API documentation for RentalX application.",
 		"version": "1.0"
+	},
+	"components": {
+		"schemas": {
+			"category": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"paths": {
+		"/categories": {
+			"post": {
+				"tags": [
+					"Category"
+				],
+				"summary": "Create a new category",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"description": {
+										"type": "string"
+									}
+								},
+								"example": {
+									"name": "New Category",
+									"description": "New category description"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Created"
+					},
+					"400": {
+						"description": "Category already exists"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Category"
+				],
+				"summary": "Get all categories",
+				"description": "Returns a list of categories",
+				"responses": {
+					"200": {
+						"description": "A list of categories",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/category"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
