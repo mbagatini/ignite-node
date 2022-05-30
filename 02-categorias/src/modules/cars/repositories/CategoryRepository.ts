@@ -5,7 +5,19 @@ import { ICategoryRepository, ICreateCategoryDTO } from "./ICategoryRepository";
 class CategoryRepository implements ICategoryRepository {
 	private categories: Category[];
 
-	constructor() {
+	// Singleton Pattern
+	private static INSTANCE: CategoryRepository;
+
+	public static getInstance(): CategoryRepository {
+		if (!CategoryRepository.INSTANCE) {
+			CategoryRepository.INSTANCE = new CategoryRepository();
+		}
+
+		return CategoryRepository.INSTANCE;
+
+	}
+
+	private constructor() {
 		this.categories = [];
 	}
 
