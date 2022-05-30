@@ -23,6 +23,23 @@
 						"type": "string"
 					}
 				}
+			},
+			"specification": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				}
 			}
 		}
 	},
@@ -79,6 +96,66 @@
 									"type": "array",
 									"items": {
 										"$ref": "#/components/schemas/category"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/specifications": {
+			"post": {
+				"tags": [
+					"Specification"
+				],
+				"summary": "Create a new specification",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"description": {
+										"type": "string"
+									}
+								},
+								"example": {
+									"name": "New specification",
+									"description": "New specification description"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Created"
+					},
+					"400": {
+						"description": "Specification already exists"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Specification"
+				],
+				"summary": "Get all specifications",
+				"description": "Returns a list of specifications",
+				"responses": {
+					"200": {
+						"description": "A list of specifications",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/specification"
 									}
 								}
 							}
