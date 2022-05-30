@@ -1,8 +1,8 @@
 import { Specification } from "../../model/Specification";
-import { SpecificationRepository } from "../../repositories/SpecificationRepository";
+import { ISpecificationRepository } from "../../repositories/ISpecificationRepository";
 
 class ListSpecificationsUseCase {
-	constructor(private repository: SpecificationRepository) { }
+	constructor(private repository: ISpecificationRepository) { }
 
 	execute(): Specification[] {
 		return this.repository.list();
