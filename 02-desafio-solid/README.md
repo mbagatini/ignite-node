@@ -49,6 +49,10 @@ Para que o desafio seja considerado como válido, todos os testes unitários da 
 
 Além de implementar as rotas da aplicação, você também deve construir a documentação da API utilizando a lib SwaggerUI.
 
+### Swagger
+
+Para saber mais sobre o Swagger, acesse a documentação oficial no site [swagger.io/resources/open-api](https://swagger.io/resources/open-api/).
+
 ### GET `/api-docs`
 
 Endpoint para consulta da documentação.
