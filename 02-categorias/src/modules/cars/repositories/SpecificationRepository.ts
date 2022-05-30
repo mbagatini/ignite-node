@@ -2,9 +2,20 @@ import { Specification } from "../model/Specification";
 import { ICreateSpecificationDTO, ISpecificationRepository } from "./ISpecificationRepository";
 
 class SpecificationRepository implements ISpecificationRepository {
+	// Singleton Design Pattern
+	private static INSTANCE: SpecificationRepository;
+
+	public static getInstance(): SpecificationRepository {
+		if (!SpecificationRepository.INSTANCE) {
+			SpecificationRepository.INSTANCE = new SpecificationRepository();
+		}
+
+		return SpecificationRepository.INSTANCE;
+	}
+
 	private specification: Specification[];
 
-	constructor() {
+	private constructor() {
 		this.specification = [];
 	}
 
