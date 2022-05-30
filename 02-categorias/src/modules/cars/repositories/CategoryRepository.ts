@@ -3,8 +3,6 @@ import { ICategoryRepository, ICreateCategoryDTO } from "./ICategoryRepository";
 
 // Liskov Substitution Principle
 class CategoryRepository implements ICategoryRepository {
-	private categories: Category[];
-
 	// Singleton Pattern
 	private static INSTANCE: CategoryRepository;
 
@@ -16,6 +14,8 @@ class CategoryRepository implements ICategoryRepository {
 		return CategoryRepository.INSTANCE;
 
 	}
+
+	private categories: Category[];
 
 	private constructor() {
 		this.categories = [];
