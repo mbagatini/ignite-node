@@ -26,3 +26,7 @@ All projects developed in classes or tasks in the bootcamp.
 [Repositories](https://github.com/mbagatini/ignite-node/tree/master/01-desafio-repositories)
 
 ## Chapter II
+
+[RentalX](https://github.com/mbagatini/ignite-node/tree/master/02-locadora-cars)
+
+[SOLID](https://github.com/mbagatini/ignite-node/tree/master/02-desafio-solid)
