@@ -1,7 +1,8 @@
 import http from 'node:http'
 import { json } from './midllewares/json.js'
+import { Database } from './database.js'
 
-const users = [];
+const database = new Database();
 
 // HTTP status
 // Endpoint e resource
@@ -15,16 +16,19 @@ const server = http.createServer(async (request, response) => {
 		if (method === 'POST') {
 			const { name, email } = request.body
 
-			users.push({
+			const user = {
 				id: Math.round(Math.random() * 100),
 				name,
 				email
-			})
+			}
+
+			database.insert('users', user)
 
 			return response.writeHead(201).end()
 		}
 
 		if (method === 'GET') {
+			const users = database.select('users')
 			return response.end(JSON.stringify(users))
 		}
 	}
