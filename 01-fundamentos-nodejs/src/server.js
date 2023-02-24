@@ -5,15 +5,30 @@ const users = [];
 // HTTP status
 // Endpoint e resource
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
 	const { method, url } = request;
+
+	const buffers = [];
+
+	// used to read all the stream
+	for await (const chunk of request) {
+		buffers.push(chunk)
+	}
+
+	try {
+		request.body = JSON.parse(Buffer.concat(buffers).toString())
+	} catch (error) {
+		request.body = null
+	}
 
 	if (url === '/users') {
 		if (method === 'POST') {
+			const { name, email } = request.body
+
 			users.push({
-				id: Math.random() * 100,
-				name: 'John',
-				email: 'john@example.com'
+				id: Math.round(Math.random() * 100),
+				name,
+				email
 			});
 
 			return response.writeHead(201).end();
@@ -29,4 +44,4 @@ const server = http.createServer((request, response) => {
 	return res.writeHead(404).end('Route Not Found');
 });
 
-server.listen(3333);
+server.listen(3333, () => console.log('-> listening on port 3333'));
