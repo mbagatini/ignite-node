@@ -11,10 +11,24 @@ class ReverseNumberStream extends Transform {
 	}
 }
 
-const server = http.createServer((request, response) => {
-	return request
-		.pipe(new ReverseNumberStream())
-		.pipe(response)
+const server = http.createServer(async (request, response) => {
+	const buffers = [];
+
+	// used to read all the stream
+	for await (const chunk of request) {
+		console.log('Recieving chunk...')
+		buffers.push(chunk)
+	}
+
+	const fullStreamContent = Buffer.concat(buffers).toString()
+
+	console.log(fullStreamContent)
+
+	return response.end(fullStreamContent)
+
+	// return request
+	// 	.pipe(new ReverseNumberStream())
+	// 	.pipe(response)
 });
 
 server.listen(3334);
