@@ -1,40 +1,26 @@
 import http from 'node:http'
-import { randomUUID } from 'node:crypto'
+
+import { routes } from './routes.js'
 import { json } from './midllewares/json.js'
-import { Database } from './database.js'
-
-const database = new Database();
-
-// HTTP status
-// Endpoint e resource
 
 const server = http.createServer(async (request, response) => {
 	const { method, url } = request
 
 	await json(request, response)
 
-	if (url === '/users') {
-		if (method === 'POST') {
-			const { name, email } = request.body
+	const route = routes.find(route => {
+		return route.method === method && route.path.test(url)
+	})
 
-			const user = {
-				id: randomUUID(),
-				name,
-				email
-			}
+	if (route) {
+		const routeParams = request.url.match(route.path)
 
-			database.insert('users', user)
+		request.params = { ...routeParams.groups }
 
-			return response.writeHead(201).end()
-		}
-
-		if (method === 'GET') {
-			const users = database.select('users')
-			return response.end(JSON.stringify(users))
-		}
+		return route.handler(request, response)
 	}
 
-	return res.writeHead(404).end('Route Not Found')
+	return response.writeHead(404).end('Route Not Found')
 })
 
 server.listen(3333, () => console.log('-> listening on port 3333'))
