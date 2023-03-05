@@ -6,9 +6,25 @@ import { knex } from '../database'
 
 export async function transactionsRoutes(app: FastifyInstance) {
     app.get('/', async (req, res) => {
-        const transactions = await knex('transaction').select('*')
+        const transactions = await knex('transaction').select()
 
-        return res.send(transactions)
+        const response = {
+            transactions,
+        }
+
+        return res.send(response)
+    })
+
+    app.get('/:id', async (req, res) => {
+        const parseParamsTransaction = z.object({
+            id: z.string().uuid(),
+        })
+
+        const { id } = parseParamsTransaction.parse(req.params)
+
+        const transaction = await knex('transaction').first().where({ id })
+
+        return res.send({ transaction })
     })
 
     app.post('/', async (req, res) => {
