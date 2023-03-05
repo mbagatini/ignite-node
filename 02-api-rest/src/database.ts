@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import { knex as knexSetup } from 'knex'
 import type { Knex } from 'knex'
 
