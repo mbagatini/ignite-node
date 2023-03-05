@@ -6,7 +6,14 @@ import { knex } from '../database'
 import { checkSessionIdExists } from '../middlewares/checkSessionIdExists'
 
 export async function transactionsRoutes(app: FastifyInstance) {
-    app.get('/', { preHandler: [checkSessionIdExists] }, async (req, res) => {
+    // another way of setting a middleware for the route context
+    app.addHook('preHandler', async (req, res) => {
+        if (req.method === 'GET') {
+            checkSessionIdExists(req, res)
+        }
+    })
+
+    app.get('/', async (req, res) => {
         const transactions = await knex('transaction').select().where({
             session_id: req.cookies.sessionId,
         })
@@ -18,42 +25,34 @@ export async function transactionsRoutes(app: FastifyInstance) {
         return res.send(response)
     })
 
-    app.get(
-        '/:id',
-        { preHandler: [checkSessionIdExists] },
-        async (req, res) => {
-            const parseParamsTransaction = z.object({
-                id: z.string().uuid(),
+    app.get('/:id', async (req, res) => {
+        const parseParamsTransaction = z.object({
+            id: z.string().uuid(),
+        })
+
+        const { id } = parseParamsTransaction.parse(req.params)
+
+        const transaction = await knex('transaction')
+            .first()
+            .where({ id, session_id: req.cookies.sessionId })
+
+        if (!transaction) {
+            return res.status(404).send({ error: 'Transaction not found' })
+        }
+
+        return res.send({ transaction })
+    })
+
+    app.get('/summary', async (req, res) => {
+        const summary = await knex('transaction')
+            .where({
+                session_id: req.cookies.sessionId,
             })
+            .sum('amount', { as: 'amount' })
+            .first()
 
-            const { id } = parseParamsTransaction.parse(req.params)
-
-            const transaction = await knex('transaction')
-                .first()
-                .where({ id, session_id: req.cookies.sessionId })
-
-            if (!transaction) {
-                return res.status(404).send({ error: 'Transaction not found' })
-            }
-
-            return res.send({ transaction })
-        },
-    )
-
-    app.get(
-        '/summary',
-        { preHandler: [checkSessionIdExists] },
-        async (req, res) => {
-            const summary = await knex('transaction')
-                .where({
-                    session_id: req.cookies.sessionId,
-                })
-                .sum('amount', { as: 'amount' })
-                .first()
-
-            return res.send({ summary })
-        },
-    )
+        return res.send({ summary })
+    })
 
     app.post('/', async (req, res) => {
         const parseBodyTransaction = z.object({
