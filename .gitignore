@@ -3,6 +3,7 @@
 # Database
 **/db.json
 **/*.db
+**/*.sqlite
 
 # Env variables
 .env
