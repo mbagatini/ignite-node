@@ -47,4 +47,33 @@ describe('Transactions - ', () => {
             }),
         ])
     })
+
+    it('should be able to get a transaction', async () => {
+        const createTransactionResponse = await request(app.server)
+            .post('/transactions')
+            .send({
+                title: 'Transaction description',
+                type: 'debit',
+                amount: 20,
+            })
+
+        const cookies = createTransactionResponse.get('Set-Cookie')
+
+        const getTransactionsResponse = await request(app.server)
+            .get('/transactions')
+            .set('Cookie', cookies)
+
+        const response = await request(app.server)
+            .get(
+                `/transactions/${getTransactionsResponse.body.transactions[0].id}`,
+            )
+            .set('Cookie', cookies)
+
+        expect(response.statusCode).toEqual(200)
+        expect(response.body.transaction).toEqual(
+            expect.objectContaining({
+                title: 'Transaction description',
+            }),
+        )
+    })
 })
