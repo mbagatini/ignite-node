@@ -74,6 +74,49 @@ describe('Transactions - ', () => {
         expect(response.body.transaction).toEqual(
             expect.objectContaining({
                 title: 'Transaction description',
+                amount: -20,
+            }),
+        )
+    })
+
+    it('should be able to get account summary', async () => {
+        let cookies: string[] = []
+        let i = 0
+
+        for (const amount of [10, 20, -5]) {
+            i++
+
+            if (i === 1) {
+                const createTransactionResponse = await request(app.server)
+                    .post('/transactions')
+                    .send({
+                        title: 'Description ' + i,
+                        type: amount < 0 ? 'debit' : 'credit',
+                        amount: amount < 0 ? amount * -1 : amount,
+                    })
+
+                cookies = createTransactionResponse.get('Set-Cookie')
+                continue
+            }
+
+            await request(app.server)
+                .post('/transactions')
+                .send({
+                    title: 'Description ' + i,
+                    type: amount < 0 ? 'debit' : 'credit',
+                    amount: amount < 0 ? amount * -1 : amount,
+                })
+                .set('Cookie', cookies)
+        }
+
+        const response = await request(app.server)
+            .get('/transactions/summary')
+            .set('Cookie', cookies)
+
+        expect(response.statusCode).toEqual(200)
+        expect(response.body.summary).toEqual(
+            expect.objectContaining({
+                amount: 25,
             }),
         )
     })
