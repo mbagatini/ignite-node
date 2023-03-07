@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "tsx watch --ignore ./node_modules src/server.ts",
 		"lint": "eslint src --ext .ts --fix",
-		"test": "vitest"
+		"test": "vitest",
+		"knex": "node --no-warnings --loader tsx ./node_modules/.bin/knex"
 	},
 	"keywords": [],
 	"author": "",

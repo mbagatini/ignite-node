@@ -1,15 +1,18 @@
 import { expect, describe, it, beforeAll, afterAll } from 'vitest'
 import request from 'supertest'
+// import { execSync } from 'child_process'
 
 import { app } from '../src/app'
 
 describe('Transactions - ', () => {
     beforeAll(async () => {
         await app.ready()
+        // execSync('npm run knex migrate:latest')
     })
 
     afterAll(async () => {
         await app.close()
+        // execSync('npm run knex migrate:rollback --all')
     })
 
     it('should create a new transaction', async () => {
@@ -36,8 +39,6 @@ describe('Transactions - ', () => {
         const response = await request(app.server)
             .get('/transactions')
             .set('Cookie', cookies)
-
-        console.log(response.body)
 
         expect(response.statusCode).toEqual(200)
         expect(response.body.transactions).toEqual([
