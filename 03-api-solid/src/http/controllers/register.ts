@@ -1,9 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z, ZodError } from 'zod'
+import { z } from 'zod'
 
-import { PrismaUsersRepository } from '@/repositories/prisma-users-repository';
+import { PrismaUsersRepository } from '@/repositories/prisma-users-repository'
 import { RegisterUseCase } from '@/use-cases/register'
-import { AlreadyExistsError } from '@/errors/already-exists-error';
 
 export async function register(
 	request: FastifyRequest,
@@ -29,13 +28,7 @@ export async function register(
 
 		await registerUseCase.execute(user)
 	} catch (error) {
-		if (error instanceof ZodError) {
-			return response.status(400).send(error.flatten().fieldErrors)
-		} else if (error instanceof AlreadyExistsError) {
-			return response.status(409).send(error.message)
-		}
-		
-		return response.status(400).send(error)
+		throw error
 	}
 
 	response.status(201).send()
