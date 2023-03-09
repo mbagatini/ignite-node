@@ -1,32 +1,18 @@
 module.exports = {
-	'env': {
-		'browser': true,
-		'es2021': true
+	env: {
+		node: true,
+		es2021: true,
 	},
-	'extends': [
-		'eslint:recommended',
-		'plugin:@typescript-eslint/recommended',
-		'plugin:prettier/recommended'
-	],
-	'overrides': [
-	],
-	'parser': '@typescript-eslint/parser',
-	'parserOptions': {
-		'ecmaVersion': 'latest',
-		'sourceType': 'module'
+	extends: ['standard', 'plugin:prettier/recommended'],
+	parser: '@typescript-eslint/parser',
+	parserOptions: {
+		ecmaVersion: 'latest',
+		sourceType: 'module',
 	},
-	'plugins': [
-		'@typescript-eslint'
-	],
-	'rules': {
-		'indent': [
-			'error',
-			'tab'
-		],
-		'linebreak-style': [
-			'error',
-			'unix'
-		],
+	plugins: ['@typescript-eslint'],
+	rules: {
+		indent: ['error', 'tab'],
+		'linebreak-style': ['error', 'unix'],
 		'prettier/prettier': [
 			'error',
 			{
@@ -38,6 +24,12 @@ module.exports = {
 				semi: false,
 			},
 		],
-		'no-useless-constructor': false,
-	}
+		'no-useless-constructor': 0,
+		camelcase: 0,
+	},
+	settings: {
+		'import/parsers': {
+			[require.resolve('@typescript-eslint/parser')]: ['.ts', '.tsx', '.d.ts'],
+		},
+	},
 }
