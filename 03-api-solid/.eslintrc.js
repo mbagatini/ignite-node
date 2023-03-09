@@ -5,7 +5,8 @@ module.exports = {
 	},
 	'extends': [
 		'eslint:recommended',
-		'plugin:@typescript-eslint/recommended'
+		'plugin:@typescript-eslint/recommended',
+		'plugin:prettier/recommended'
 	],
 	'overrides': [
 	],
@@ -33,6 +34,17 @@ module.exports = {
 		'semi': [
 			'error',
 			'never'
-		]
+		],
+		'prettier/prettier': [
+			'error',
+			{
+				printWidth: 80,
+				useTabs: true,
+				singleQuote: true,
+				trailingComma: 'all',
+				arrowParens: 'always',
+				semi: false,
+			},
+		],
 	}
 }
