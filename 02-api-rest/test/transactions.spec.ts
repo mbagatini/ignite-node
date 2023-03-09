@@ -1,13 +1,13 @@
 import { expect, describe, it, beforeAll, afterAll } from 'vitest'
 import request from 'supertest'
-// import { execSync } from 'child_process'
+import { execSync } from 'child_process'
 
 import { app } from '../src/app'
 
 describe('Transactions - ', () => {
     beforeAll(async () => {
         await app.ready()
-        // execSync('npm run knex migrate:latest')
+        execSync('npm run knex migrate:latest')
     })
 
     afterAll(async () => {
