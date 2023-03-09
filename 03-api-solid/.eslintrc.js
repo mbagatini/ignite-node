@@ -27,14 +27,6 @@ module.exports = {
 			'error',
 			'unix'
 		],
-		'quotes': [
-			'error',
-			'single'
-		],
-		'semi': [
-			'error',
-			'never'
-		],
 		'prettier/prettier': [
 			'error',
 			{
@@ -46,5 +38,6 @@ module.exports = {
 				semi: false,
 			},
 		],
+		'no-useless-constructor': false,
 	}
 }
