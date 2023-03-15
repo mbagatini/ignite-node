@@ -36,13 +36,13 @@ describe('Register Use Case', () => {
 			password: '1234567890',
 		})
 
-		expect(async () => {
-			await registerUseCase.execute({
+		await expect(() =>
+			registerUseCase.execute({
 				name: 'John Smith',
 				email,
 				password: '1234567890',
-			})
-		}).rejects.toBeInstanceOf(AlreadyExistsError)
+			}),
+		).rejects.toBeInstanceOf(AlreadyExistsError)
 	})
 
 	it('should be able to register user', async () => {
