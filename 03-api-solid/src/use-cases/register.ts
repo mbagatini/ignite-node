@@ -34,7 +34,6 @@ export class RegisterUseCase {
 			name,
 			email,
 			password_hash,
-			created_at: new Date(),
 		})
 
 		return {
