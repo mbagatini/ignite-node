@@ -8,15 +8,15 @@ import { compare } from 'bcryptjs'
 
 describe('Register Use Case', () => {
 	let userRepository: UsersRepository
-	let registerUseCase: RegisterUseCase
+	let sut: RegisterUseCase
 
 	beforeEach(() => {
 		userRepository = new InMemoryUsersRepository()
-		registerUseCase = new RegisterUseCase(userRepository)
+		sut = new RegisterUseCase(userRepository)
 	})
 
 	it('should hash user password on registration', async () => {
-		const { user } = await registerUseCase.execute({
+		const { user } = await sut.execute({
 			name: 'John Smith',
 			email: 'john@example.com',
 			password: '1234567890',
@@ -30,14 +30,14 @@ describe('Register Use Case', () => {
 	it('should not be able to register with same e-mail', async () => {
 		const email = 'john@example.com'
 
-		await registerUseCase.execute({
+		await sut.execute({
 			name: 'John Smith',
 			email,
 			password: '1234567890',
 		})
 
 		await expect(() =>
-			registerUseCase.execute({
+			sut.execute({
 				name: 'John Smith',
 				email,
 				password: '1234567890',
@@ -46,7 +46,7 @@ describe('Register Use Case', () => {
 	})
 
 	it('should be able to register user', async () => {
-		const { user } = await registerUseCase.execute({
+		const { user } = await sut.execute({
 			name: 'John Smith',
 			email: 'john@example.com',
 			password: '1234567890',
