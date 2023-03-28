@@ -1,7 +1,7 @@
 import { ZodError } from 'zod'
 import fastify from 'fastify'
 
-import { appRoutes } from './routes'
+import { appRoutes } from './http/routes'
 import { AlreadyExistsError } from './errors/already-exists-error'
 import { env } from './env'
 
