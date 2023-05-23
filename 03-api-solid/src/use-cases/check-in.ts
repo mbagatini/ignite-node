@@ -17,6 +17,15 @@ export class CheckInUseCase {
 		userId,
 		gymId,
 	}: CheckInUseCaseRequest): Promise<CheckInUseCaseResponse> {
+		const checkInAlreadyDone = await this.checkInsRepository.findByUserIdOnDate(
+			userId,
+			new Date(),
+		)
+
+		if (checkInAlreadyDone) {
+			throw new Error('Check-in already done today')
+		}
+
 		const checkIn = await this.checkInsRepository.create({
 			user_id: userId,
 			gym_id: gymId,
