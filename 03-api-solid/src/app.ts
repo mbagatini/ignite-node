@@ -4,6 +4,7 @@ import fastify from 'fastify'
 import { appRoutes } from './http/routes'
 import { AlreadyExistsError } from './errors/already-exists-error'
 import { env } from './env'
+import { ValidationError } from './errors/validation-error'
 
 export const app = fastify()
 
@@ -12,6 +13,8 @@ app.register(appRoutes)
 app.setErrorHandler((error, request, response) => {
 	if (error instanceof ZodError) {
 		return response.status(400).send(`Validation error: ${error.issues}`)
+	} else if (error instanceof ValidationError) {
+		return response.status(400).send(error.message)
 	} else if (error instanceof AlreadyExistsError) {
 		return response.status(409).send(error.message)
 	}

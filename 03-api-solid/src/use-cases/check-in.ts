@@ -1,5 +1,6 @@
 import { CheckIn } from '@/dto/check-in'
 import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
+import { ValidationError } from '@/errors/validation-error'
 import { CheckInsRepository } from '@/repositories/check-ins-repository'
 import { GymsRepository } from '@/repositories/gyms-repository'
 import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates'
@@ -47,7 +48,7 @@ export class CheckInUseCase {
 		const MAX_DISTANCE_IN_KM = 0.1
 
 		if (distance > MAX_DISTANCE_IN_KM) {
-			throw new Error('You are too far away from the gym to check in')
+			throw new ValidationError('You are too far away from the gym to check in')
 		}
 
 		const checkInOnSameDate = await this.checkInsRepository.findByUserIdOnDate(
@@ -56,7 +57,7 @@ export class CheckInUseCase {
 		)
 
 		if (checkInOnSameDate) {
-			throw new Error('Check-in already done today')
+			throw new ValidationError('Check-in already done today')
 		}
 
 		const checkIn = await this.checkInsRepository.create({
