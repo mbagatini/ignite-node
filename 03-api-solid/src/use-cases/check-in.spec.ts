@@ -9,6 +9,7 @@ import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-user
 import { GymsRepository } from '@/repositories/gyms-repository'
 import { InMemoryGymsRepository } from '@/repositories/in-memory/in-memory-gyms-repository'
 import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
+import { ValidationError } from '@/errors/validation-error'
 
 describe('Check in Use Case', () => {
 	let checkInsRepository: CheckInsRepository
@@ -83,7 +84,7 @@ describe('Check in Use Case', () => {
 				userLatitude: 40.6970193,
 				userLongitude: -74.3093127,
 			}),
-		).rejects.toBeInstanceOf(Error)
+		).rejects.toBeInstanceOf(ValidationError)
 	})
 
 	it('should be able to check in twice in different dates', async () => {
@@ -157,6 +158,6 @@ describe('Check in Use Case', () => {
 				userLatitude: 40.6970193,
 				userLongitude: -74.3093127,
 			}),
-		).rejects.toBeInstanceOf(Error)
+		).rejects.toBeInstanceOf(ValidationError)
 	})
 })
