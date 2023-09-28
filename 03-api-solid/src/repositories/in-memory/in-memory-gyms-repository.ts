@@ -21,4 +21,15 @@ export class InMemoryGymsRepository implements GymsRepository {
 
 		return Promise.resolve(gym || null)
 	}
+
+	findMany(query: string, page: number): Promise<Gym[]> {
+		const indexStart = (page - 1) * 20
+		const indexEnd = page * 20
+
+		const gyms = this.gyms
+			.filter((gym) => gym.title.includes(query))
+			.slice(indexStart, indexEnd)
+
+		return Promise.resolve(gyms)
+	}
 }

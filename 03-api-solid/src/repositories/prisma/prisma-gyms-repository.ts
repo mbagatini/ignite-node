@@ -26,4 +26,24 @@ export class PrismaGymsRepository implements GymsRepository {
 			longitude: Number(gym.longitude),
 		}
 	}
+
+	async findMany(query: string, page: number): Promise<Gym[]> {
+		const gyms = await prisma.gym.findMany({
+			where: {
+				title: {
+					contains: query,
+				},
+			},
+			skip: (page - 1) * 20,
+			take: 20,
+		})
+
+		const records = gyms.map((gym) => ({
+			...gym,
+			latitude: Number(gym.latitude),
+			longitude: Number(gym.longitude),
+		}))
+
+		return records
+	}
 }
