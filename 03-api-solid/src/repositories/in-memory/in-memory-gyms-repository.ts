@@ -1,6 +1,7 @@
 import { GymCreation, Gym } from '@/dto/gym'
-import { GymsRepository } from '../gyms-repository'
+import { FindManyNearbyParams, GymsRepository } from '../gyms-repository'
 import { randomUUID } from 'node:crypto'
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates'
 
 export class InMemoryGymsRepository implements GymsRepository {
 	private gyms: Gym[] = []
@@ -29,6 +30,22 @@ export class InMemoryGymsRepository implements GymsRepository {
 		const gyms = this.gyms
 			.filter((gym) => gym.title.includes(query))
 			.slice(indexStart, indexEnd)
+
+		return Promise.resolve(gyms)
+	}
+
+	findManyNearby(params: FindManyNearbyParams): Promise<Gym[]> {
+		const gyms = this.gyms.filter((gym) => {
+			const distannce = getDistanceBetweenCoordinates(
+				{ ...params },
+				{
+					latitude: gym.latitude,
+					longitude: gym.longitude,
+				},
+			)
+
+			return distannce <= 10
+		})
 
 		return Promise.resolve(gyms)
 	}

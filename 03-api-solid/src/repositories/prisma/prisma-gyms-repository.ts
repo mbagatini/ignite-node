@@ -1,5 +1,5 @@
 import { GymCreation, Gym } from '@/dto/gym'
-import { GymsRepository } from '../gyms-repository'
+import { FindManyNearbyParams, GymsRepository } from '../gyms-repository'
 import { prisma } from '@/database/prisma'
 
 export class PrismaGymsRepository implements GymsRepository {
@@ -45,5 +45,9 @@ export class PrismaGymsRepository implements GymsRepository {
 		}))
 
 		return records
+	}
+
+	findManyNearby(params: FindManyNearbyParams): Promise<Gym[]> {
+		throw new Error('Method not implemented.')
 	}
 }
