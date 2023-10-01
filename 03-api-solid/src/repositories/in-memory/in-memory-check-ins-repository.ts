@@ -19,6 +19,22 @@ export class InMemoryCheckInsRepository implements CheckInsRepository {
 		return Promise.resolve(checkIn)
 	}
 
+	update(data: CheckIn): Promise<CheckIn> {
+		const checkInIndex = this.checkIns.findIndex(
+			(checkIn) => checkIn.id === data.id,
+		)
+
+		if (checkInIndex >= 0) this.checkIns[checkInIndex] = data
+
+		return Promise.resolve(data)
+	}
+
+	findById(id: string): Promise<CheckIn | null> {
+		const checkIn = this.checkIns.find((checkIn) => checkIn.id === id)
+
+		return Promise.resolve(checkIn || null)
+	}
+
 	findByUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null> {
 		const startOfDate = dayjs(date).startOf('date')
 		const endOfDate = dayjs(date).endOf('date')

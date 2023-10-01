@@ -3,7 +3,7 @@ export type CheckIn = {
 	user_id: string
 	gym_id: string
 	created_at: Date
-	updated_at?: Date | null
+	validated_at?: Date | null
 }
 
 export type CheckInCreation = {
