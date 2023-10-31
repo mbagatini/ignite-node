@@ -5,8 +5,13 @@ import { appRoutes } from './http/routes'
 import { AlreadyExistsError } from './errors/already-exists-error'
 import { env } from './env'
 import { ValidationError } from './errors/validation-error'
+import fastifyJwt from '@fastify/jwt'
 
 export const app = fastify()
+
+app.register(fastifyJwt, {
+	secret: env.JWT_SECRET,
+})
 
 app.register(appRoutes)
 
