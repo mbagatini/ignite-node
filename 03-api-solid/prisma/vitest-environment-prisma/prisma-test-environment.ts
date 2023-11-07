@@ -25,7 +25,7 @@ export default <Environment>{
 		// creates a new schema to run e2e tests
 		process.env.DATABASE_URL = databaseUrl
 
-		execSync('npx run prisma migrate deploy')
+		execSync('npx prisma migrate deploy')
 
 		// after all tests
 		return {
