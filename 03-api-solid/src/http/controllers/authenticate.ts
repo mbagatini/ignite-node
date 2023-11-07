@@ -43,5 +43,5 @@ export async function authenticate(
 		},
 	)
 
-	response.status(200).send(token)
+	response.status(200).send({ token })
 }
