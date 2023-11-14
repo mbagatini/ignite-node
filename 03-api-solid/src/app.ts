@@ -19,7 +19,7 @@ app.setErrorHandler((error, request, response) => {
 	if (error instanceof ZodError) {
 		return response.status(400).send({
 			message: 'Validation error',
-			issues: error.flatten().fieldErrors,
+			issues: error.issues,
 		})
 	} else if (error instanceof ValidationError) {
 		return response.status(400).send(error.message)
