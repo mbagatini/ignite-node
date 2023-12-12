@@ -11,4 +11,5 @@ export type UserCreation = {
 	name: string
 	email: string
 	password_hash: string
+	role?: 'ADMIN' | 'MEMBER'
 }

@@ -1,11 +1,18 @@
+import { makeRegisterUseCase } from '@/use-cases/factories/make-register-use-case'
 import { FastifyInstance } from 'fastify'
 import request from 'supertest'
 
-export async function createAndAuthenticateUser(app: FastifyInstance) {
-	await request(app.server).post('/users').send({
+export async function createAndAuthenticateUser(
+	app: FastifyInstance,
+	isAdmin?: boolean,
+) {
+	const registerUseCase = makeRegisterUseCase()
+
+	await registerUseCase.execute({
 		name: 'John Doe',
 		email: 'john@example.com',
 		password: '1234567',
+		...(isAdmin && { role: 'ADMIN' }),
 	})
 
 	const { body } = await request(app.server).post('/sessions').send({

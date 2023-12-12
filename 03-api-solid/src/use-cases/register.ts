@@ -8,6 +8,7 @@ interface RegisterUseCaseRequest {
 	name: string
 	email: string
 	password: string
+	role?: 'ADMIN' | 'MEMBER'
 }
 
 interface RegisterUseCaseResponse {
@@ -20,7 +21,7 @@ export class RegisterUseCase {
 	async execute(
 		data: RegisterUseCaseRequest,
 	): Promise<RegisterUseCaseResponse> {
-		const { name, email, password } = data
+		const { name, email, password, role } = data
 
 		const userExists = await this.usersRepository.findByEmail(email)
 
@@ -34,10 +35,11 @@ export class RegisterUseCase {
 			name,
 			email,
 			password_hash,
+			role: role || 'MEMBER',
 		})
 
 		return {
-			user,
+			user: user as User,
 		}
 	}
 }
