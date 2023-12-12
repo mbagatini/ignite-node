@@ -43,5 +43,23 @@ export async function authenticate(
 		},
 	)
 
-	response.status(200).send({ token })
+	const refreshToken = await response.jwtSign(
+		{},
+		{
+			sign: {
+				sub: userAuth.id,
+				expiresIn: '7d',
+			},
+		},
+	)
+
+	response
+		.status(200)
+		.setCookie('refreshToken', refreshToken, {
+			path: '/', // entire app
+			secure: true,
+			sameSite: true, // only accessible in the same app
+			httpOnly: true, // not accessible by browser
+		})
+		.send({ token })
 }
