@@ -1,0 +1,27 @@
+{
+  "name": "challenge-ignite-nodejs-02-daily-diet",
+  "version": "1.0.0",
+  "description": "Daily Diet API",
+  "main": "src/server.ts",
+  "scripts": {
+    "dev": "tsx watch --ignore ./node_modules src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.10.5",
+    "prisma": "^5.7.1",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.2.0",
+    "@prisma/client": "^5.7.1",
+    "bcryptjs": "^2.4.3",
+    "fastify": "^4.25.2"
+  }
+}
