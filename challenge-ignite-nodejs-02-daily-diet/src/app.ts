@@ -1,15 +1,32 @@
 import fastify from 'fastify'
+import cookie from '@fastify/cookie'
+import fastifyJwt from '@fastify/jwt'
 
-import { mealsRoutes } from './routes/meals'
+import { mealsRoutes } from './routes/meals.routes'
 import { ZodError } from 'zod'
 import { ValidationError } from './errors/validation-error'
 import { AlreadyExistsError } from './errors/already-exists-error'
 import { userRoutes } from './routes/users.routes'
+import { sessionsRoutes } from './routes/sessions.routes'
 
 export const app = fastify()
 
+app.register(fastifyJwt, {
+	secret: 'desafioignitenode02',
+	cookie: {
+		cookieName: 'refreshToken',
+		signed: false,
+	},
+	sign: {
+		expiresIn: '10m',
+	},
+})
+
+app.register(cookie)
 
 app.register(userRoutes, { prefix: '/users' })
+app.register(sessionsRoutes, { prefix: '/sessions' })
+app.register(mealsRoutes, { prefix: '/meals' })
 
 app.setErrorHandler((error, request, response) => {
 	if (error instanceof ZodError) {
