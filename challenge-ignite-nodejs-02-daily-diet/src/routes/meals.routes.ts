@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { prisma } from "database/prisma";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
+import dayjs from "dayjs";
 
 export async function mealsRoutes(app: FastifyInstance) {
 	/** must be authenticated */
@@ -130,5 +131,87 @@ export async function mealsRoutes(app: FastifyInstance) {
 		})
 
 		response.status(204).send()
+	})
+
+	app.get('/metrics', async (request: FastifyRequest, response: FastifyReply) => {
+		const userId = request.user.sub
+
+		const filters: Record<string, any> = {
+			userId
+		}
+
+		const validateFilterParams = z.object({
+			date: z.coerce.date().optional()
+		})
+
+		const params = validateFilterParams.parse(request.query)
+
+		if (params.date) {
+			const date = dayjs(params.date)
+			const startOfDate = date.startOf('date')
+			const endOfDate = date.endOf('date')
+
+			filters.createdAt = {
+				gte: startOfDate.toDate(),
+				lte: endOfDate.toDate()
+			}
+		}
+
+		const totalMeals = await prisma.meal.aggregate({
+			_count: {
+				id: true
+			},
+			where: filters
+		})
+
+		const totalCount = totalMeals._count.id
+
+		const mealsInDiet = await prisma.meal.aggregate({
+			_count: {
+				id: true
+			},
+			where: { 
+				...filters,
+				isInDiet: true
+			}
+		})
+
+		const onDietCount = mealsInDiet._count.id
+
+		let maxCountDate = params.date
+
+		if (!params.date) {
+			const resultMeals = await prisma.meal.groupBy({
+				by: ['createdAt'],
+				_count: {
+					createdAt: true,
+				},
+				where: filters,
+				orderBy: {
+					_count: {
+						createdAt: 'desc',
+					},
+				},
+				take: 1
+			});
+
+			maxCountDate = resultMeals[0].createdAt
+		}
+
+		const bestSequence = await prisma.meal.findMany({
+			where: {
+				userId: filters.userId,
+				createdAt: maxCountDate,
+			}
+		})
+
+		const result = {
+			total: totalCount,
+			onDiet: onDietCount,
+			nonCompliant: totalCount - onDietCount,
+			bestSequence
+		}
+
+		response.status(200).send(result)
 	})
 }
