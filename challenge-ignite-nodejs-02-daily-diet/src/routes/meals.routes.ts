@@ -82,6 +82,29 @@ export async function mealsRoutes(app: FastifyInstance) {
 		response.status(200).send({ meals })
 	})
 
+	app.get('/:id', async (request: FastifyRequest, response: FastifyReply) => {
+		const userId = request.user.sub
+
+		const validateMealParams = z.object({
+			id: z.string().uuid()
+		})
+
+		const { id } = validateMealParams.parse(request.params)
+
+		const meal = await prisma.meal.findUnique({
+			where: { 
+				id,
+				userId
+			 }
+		})
+
+		if (!meal) {
+			throw new ResourceNotFoundError('Meal not found')
+		}
+
+		response.status(200).send(meal)
+	})
+
 	app.delete('/:id', async (request: FastifyRequest, response: FastifyReply) => {
 		const userId = request.user.sub
 
