@@ -1,12 +1,12 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { hash } from 'bcryptjs'
-import * as z from 'zod'
+import { z } from 'zod'
 
 import { prisma } from "database/prisma";
 import { AlreadyExistsError } from "@/errors/already-exists-error";
 
 export async function userRoutes(app: FastifyInstance) {
-	app.post('/', async (request, response) => {
+	app.post('/', async (request: FastifyRequest, response: FastifyReply) => {
 		const parseUserBody = z.object({
 			name: z.string(),
 			username: z.string(),

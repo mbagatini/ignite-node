@@ -3,6 +3,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { z } from 'zod'
 
 import { prisma } from "database/prisma";
+import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 
 export async function mealsRoutes(app: FastifyInstance) {
 	/** must be authenticated */
@@ -30,6 +31,43 @@ export async function mealsRoutes(app: FastifyInstance) {
 		})
 
 		response.status(201).send()
+	})
+	
+	app.post('/:id', async (request: FastifyRequest, response: FastifyReply) => {
+		const userId = request.user.sub
+
+		const validateMealParams = z.object({
+			id: z.string().uuid()
+		})
+
+		const { id } = validateMealParams.parse(request.params)
+
+		const mealExists = await prisma.meal.findUnique({
+			where: { 
+				id,
+				userId
+			 }
+		})
+
+		if (!mealExists) {
+			throw new ResourceNotFoundError('Meal not found')
+		}
+
+		const parseMealBody = z.object({
+			name: z.string().optional(),
+			description: z.string().optional(),
+			createdAt: z.coerce.date().optional(),
+			isInDiet: z.boolean().optional()
+		})
+
+		const data = parseMealBody.parse(request.body)
+
+		await prisma.meal.update({
+			data,
+			where: { id }
+		})
+
+		response.status(204).send()
 	})
 
 	app.get('/', async (request: FastifyRequest, response: FastifyReply) => {
