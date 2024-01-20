@@ -32,3 +32,50 @@ Nesse desafio foi desenvolvida uma API para a adoção de animais, a Find A Frie
 Por isso, deixamos abaixo o link para o layout da aplicação que utilizaria essa API.
 
 [Find A Friend](https://www.figma.com/community/file/1220006040435238030)
+
+### Instalando o projeto
+
+#### Instalando as dependências
+
+```bash
+npm install
+```
+
+#### Preparando o ambiente
+
+Duplique o arquivo `.env.example` e renomeie para `.env`. Preencha as variáveis de acordo com o seu ambiente.
+
+O projeto foi preparado para utilização do Docker. Para criar e inicializar os serviços, execute o comando abaixo:
+
+```bash
+docker-compose up -d
+```
+
+#### Banco de dados
+
+Para criar as tabelas do banco de dados, execute o comando abaixo:
+
+```bash
+npx prisma migrate dev
+```
+
+### Executando o projeto
+
+Para iniciar a aplicação, execute o comando abaixo:
+
+```bash
+npm run dev
+```
+
+#### Executando os testes
+
+Testes unitários:
+```bash
+npm run test
+```
+
+Testes end to end:
+```bash
+npm run pretest:e2e
+npm run test:e2e
+```
