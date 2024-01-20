@@ -28,10 +28,11 @@ export class RegisterUseCase {
         if (orgAlreadyExists)
             throw new AlreadyExistsError('Username already in use')
 
+        const { password, ...rest } = data
         const passwordHash = await hash(data.password, 6) // 6 rounds of hash algorithm
 
         const org = await this.orgsRepository.create({
-            ...data,
+            ...rest,
             passwordHash,
             createdAt: new Date(),
         })

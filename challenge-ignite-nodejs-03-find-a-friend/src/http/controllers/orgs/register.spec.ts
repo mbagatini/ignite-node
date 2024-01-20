@@ -11,13 +11,13 @@ describe('Organizations (e2e)', () => {
         await app.close()
     })
 
-    it('should be able to register a new organization', async () => {
+    it('should be able to register a organization', async () => {
         const response = await request(app.server).post('/orgs').send({
             name: 'Org Name',
             address: 'Orange Street, 123',
             city: 'São Paulo',
             state: 'SP',
-            whatsapp: '5511999999999',
+            whatsapp: '11999999999',
             username: 'org',
             password: '123456',
         })

@@ -13,6 +13,9 @@
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "test:e2e": "vitest --dir src/http",
+    "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
+    "test:install-prisma-environment": "npm link vitest-environment-prisma",
+    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
     "lint": "eslint src --ext .ts --fix"
   },
   "keywords": [],
@@ -37,6 +40,7 @@
     "tsup": "^8.0.1",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
+    "vite-tsconfig-paths": "^4.3.1",
     "vitest": "^1.2.1"
   },
   "dependencies": {
@@ -45,7 +49,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "fastify": "^4.25.2",
-    "vite-tsconfig-paths": "^4.3.1",
+    "npm-run-all": "4.1.5",
     "zod": "^3.22.4"
   }
 }

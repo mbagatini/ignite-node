@@ -19,7 +19,7 @@ export class InMemoryOrganizationsRepository
         return org
     }
 
-    async findByUsername(username: string): Promise<Organization | undefined> {
-        return this.orgs.find((org) => org.username === username)
+    async findByUsername(username: string): Promise<Organization | null> {
+        return this.orgs.find((org) => org.username === username) ?? null
     }
 }
