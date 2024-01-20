@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "prod": "node build/server.js",
@@ -30,6 +31,7 @@
     "eslint-plugin-prettier": "^5.1.2",
     "eslint-plugin-promise": "^6.1.1",
     "prettier": "^3.1.1",
+    "prisma": "^5.8.1",
     "supertest": "^6.3.4",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.1",
@@ -39,6 +41,7 @@
   },
   "dependencies": {
     "@fastify/jwt": "^8.0.0",
+    "@prisma/client": "5.8.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "fastify": "^4.25.2",
