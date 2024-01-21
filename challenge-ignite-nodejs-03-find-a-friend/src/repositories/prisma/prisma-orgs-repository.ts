@@ -4,10 +4,14 @@ import { prisma } from '@/database/prisma'
 
 export class PrismaOrganizationsRepository implements OrganizationsRepository {
     async create(data: OrganizationCreation): Promise<Organization> {
-        return prisma.organization.create({ data })
+        return await prisma.organization.create({ data })
+    }
+
+    async findById(id: string): Promise<Organization | null> {
+        return await prisma.organization.findUnique({ where: { id } })
     }
 
     async findByUsername(username: string): Promise<Organization | null> {
-        return prisma.organization.findUnique({ where: { username } })
+        return await prisma.organization.findUnique({ where: { username } })
     }
 }

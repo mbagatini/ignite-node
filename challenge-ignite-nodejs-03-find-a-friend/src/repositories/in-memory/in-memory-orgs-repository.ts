@@ -19,6 +19,10 @@ export class InMemoryOrganizationsRepository
         return org
     }
 
+    async findById(id: string): Promise<Organization | null> {
+        return this.orgs.find((org) => org.id === id) ?? null
+    }
+
     async findByUsername(username: string): Promise<Organization | null> {
         return this.orgs.find((org) => org.username === username) ?? null
     }
