@@ -1,5 +1,5 @@
 // This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// learn more about it in the docs  https //pris.ly/d/prisma-schema
 
 generator client {
     provider = "prisma-client-js"
@@ -20,6 +20,21 @@ model Organization {
     username     String   @unique
     passwordHash String
     createdAt    DateTime @default(now())
+    pets         Pet[]
 
     @@map("organization")
+}
+
+model Pet {
+    id        String       @id @default(uuid())
+    name      String
+    age       Int
+    rescuedAt DateTime?
+    size      String
+    adopted   Boolean      @default(false)
+    adoptedAt DateTime?
+    orgId     String
+    org       Organization @relation(fields: [orgId], references: [id])
+
+    @@map("pet")
 }
