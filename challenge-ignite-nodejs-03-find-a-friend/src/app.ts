@@ -6,6 +6,7 @@ import { AlreadyExistsError } from './errors/already-exists-error'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 import { fastifyCookie } from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
+import { ValidationError } from './errors/validation-error'
 
 export const app = fastify()
 
@@ -30,6 +31,8 @@ app.setErrorHandler((error, request, response) => {
             message: 'Validation error',
             issues: error.issues,
         })
+    } else if (error instanceof ValidationError) {
+        return response.status(400).send(error.message)
     } else if (error instanceof InvalidCredentialsError) {
         return response.status(400).send(error.message)
     } else if (error instanceof AlreadyExistsError) {
