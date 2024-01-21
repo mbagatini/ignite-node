@@ -19,7 +19,7 @@ describe('Register Organization Use Case', () => {
             address: 'Orange Street, 123',
             city: 'São Paulo',
             state: 'SP',
-            whatsapp: '5511999999999',
+            whatsapp: '11999999999',
             username: 'org',
             password: '123456',
         })
@@ -33,7 +33,7 @@ describe('Register Organization Use Case', () => {
             address: 'Orange Street, 123',
             city: 'São Paulo',
             state: 'SP',
-            whatsapp: '5511999999999',
+            whatsapp: '11999999999',
             username: 'org',
             password: '123456',
         })
@@ -49,21 +49,22 @@ describe('Register Organization Use Case', () => {
             address: 'Orange Street, 123',
             city: 'São Paulo',
             state: 'SP',
-            whatsapp: '5511999999999',
+            whatsapp: '11999999999',
             username: 'org',
             password: '123456',
         })
 
-        expect(async () => {
-            await sut.execute({
-                name: 'Org Name',
-                address: 'Orange Street, 123',
-                city: 'São Paulo',
-                state: 'SP',
-                whatsapp: '5511999999999',
-                username: 'org',
-                password: '123456',
-            })
-        }).rejects.toThrow('Username already in use')
+        expect(
+            async () =>
+                await sut.execute({
+                    name: 'Org Name',
+                    address: 'Orange Street, 123',
+                    city: 'São Paulo',
+                    state: 'SP',
+                    whatsapp: '11999999999',
+                    username: 'org',
+                    password: '123456',
+                }),
+        ).rejects.toThrow('Username already in use')
     })
 })

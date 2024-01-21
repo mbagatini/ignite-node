@@ -3,21 +3,21 @@ import { InvalidCredentialsError } from '@/errors/invalid-credentials-error'
 import { type OrganizationsRepository } from '@/repositories/orgs-repository'
 import { compare } from 'bcryptjs'
 
-interface AuhtenticateUseCaseProps {
+interface AuthenticateUseCaseProps {
     username: string
     password: string
 }
 
-interface AuhtenticateUseCaseResponse {
+interface AuthenticateUseCaseResponse {
     org: Organization
 }
 
-export class AuhtenticateUseCase {
+export class AuthenticateUseCase {
     constructor(private readonly orgsRepository: OrganizationsRepository) {}
 
     async execute(
-        props: AuhtenticateUseCaseProps,
-    ): Promise<AuhtenticateUseCaseResponse> {
+        props: AuthenticateUseCaseProps,
+    ): Promise<AuthenticateUseCaseResponse> {
         const { username, password } = props
 
         const org = await this.orgsRepository.findByUsername(username)

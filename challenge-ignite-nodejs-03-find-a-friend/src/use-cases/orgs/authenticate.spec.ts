@@ -1,13 +1,13 @@
 import { type OrganizationsRepository } from '@/repositories/orgs-repository'
 import { describe, beforeEach, it, expect } from 'vitest'
-import { AuhtenticateUseCase } from './authenticate'
+import { AuthenticateUseCase } from './authenticate'
 import { InMemoryOrganizationsRepository } from '@/repositories/in-memory/in-memory-orgs-repository'
 import { hash } from 'bcryptjs'
 import { InvalidCredentialsError } from '@/errors/invalid-credentials-error'
 
 describe('Authenticate Organization Use Case', () => {
     let orgRepository: OrganizationsRepository
-    let sut: AuhtenticateUseCase
+    let sut: AuthenticateUseCase
 
     function mountTestUseCase() {
         const orgDetails = {
@@ -15,7 +15,7 @@ describe('Authenticate Organization Use Case', () => {
             address: 'Orange Street, 123',
             city: 'São Paulo',
             state: 'SP',
-            whatsapp: '5511999999999',
+            whatsapp: '11999999999',
             username: 'org',
             password: '123456',
         }
@@ -35,7 +35,7 @@ describe('Authenticate Organization Use Case', () => {
 
     beforeEach(() => {
         orgRepository = new InMemoryOrganizationsRepository()
-        sut = new AuhtenticateUseCase(orgRepository)
+        sut = new AuthenticateUseCase(orgRepository)
     })
 
     it('should be able to authenticate an organization', async () => {
@@ -52,7 +52,7 @@ describe('Authenticate Organization Use Case', () => {
     })
 
     it('should throw error if organization does not exists', async () => {
-        await expect(
+        expect(
             async () =>
                 await sut.execute({
                     username: 'fake',
@@ -66,7 +66,7 @@ describe('Authenticate Organization Use Case', () => {
 
         await createOrg()
 
-        await expect(
+        expect(
             async () =>
                 await sut.execute({
                     username: orgDetails.username,
@@ -80,7 +80,7 @@ describe('Authenticate Organization Use Case', () => {
 
         await createOrg()
 
-        await expect(
+        expect(
             async () =>
                 await sut.execute({
                     username: 'fake',
