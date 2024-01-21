@@ -3,7 +3,7 @@ import { RegisterUseCase } from '@/use-cases/orgs/register'
 
 export function makeRegisteOrganizationUseCase(): RegisterUseCase {
     const orgsRepository = new PrismaOrganizationsRepository()
-    const registeOrganizationUseCase = new RegisterUseCase(orgsRepository)
+    const registerOrganizationUseCase = new RegisterUseCase(orgsRepository)
 
-    return registeOrganizationUseCase
+    return registerOrganizationUseCase
 }
