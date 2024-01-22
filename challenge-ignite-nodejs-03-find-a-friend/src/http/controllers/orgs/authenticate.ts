@@ -19,19 +19,21 @@ export async function authenticate(
     const orgAuth = authResponse.org
 
     const token = await response.jwtSign({
-        sign: {
-            id: orgAuth.id,
-        },
+        id: orgAuth.id,
     })
 
-    const refreshToken = await response.jwtSign({
-        sign: {
+    const refreshToken = await response.jwtSign(
+        {
             id: orgAuth.id,
-            expiresIn: '7d',
         },
-    })
+        {
+            sign: {
+                expiresIn: '7d',
+            },
+        },
+    )
 
-    return await response
+    response
         .status(200)
         .setCookie('refreshToken', refreshToken, {
             path: '/', // entire app
