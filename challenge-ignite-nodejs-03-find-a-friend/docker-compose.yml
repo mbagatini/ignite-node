@@ -2,6 +2,7 @@ version: '3'
 
 services:
   api-database-pg:
+    container_name: database-pg
     image: 'bitnami/postgresql:latest'
     ports:
       - 5432:5432
