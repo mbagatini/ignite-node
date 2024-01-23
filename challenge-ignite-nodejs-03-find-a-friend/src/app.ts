@@ -7,6 +7,7 @@ import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 import { fastifyCookie } from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
 import { ValidationError } from './errors/validation-error'
+import { NotFoundError } from './errors/not-found-error'
 
 export const app = fastify()
 
@@ -32,9 +33,11 @@ app.setErrorHandler((error, request, response) => {
             issues: error.issues,
         })
     } else if (error instanceof ValidationError) {
-        return response.status(400).send(error.message)
+        return response.status(400).send({ message: error.message })
     } else if (error instanceof InvalidCredentialsError) {
-        return response.status(400).send(error.message)
+        return response.status(400).send({ message: error.message })
+    } else if (error instanceof NotFoundError) {
+        return response.status(404).send({ message: error.message })
     } else if (error instanceof AlreadyExistsError) {
         return response.status(409).send({
             message: error.message,
