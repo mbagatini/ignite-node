@@ -10,4 +10,14 @@ export class PrismaPetsRepository implements PetsRepository {
 
         return pet as Pet
     }
+
+    async findById(id: string): Promise<Pet | null> {
+        const pet = await prisma.pet.findFirst({
+            where: {
+                id,
+            },
+        })
+
+        return (pet as Pet) ?? null
+    }
 }

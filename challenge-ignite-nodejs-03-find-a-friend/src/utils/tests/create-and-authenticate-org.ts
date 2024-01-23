@@ -5,7 +5,7 @@ import request from 'supertest'
 export async function createAndAuthenticateOrganization(app: FastifyInstance) {
     const registerUseCase = makeRegisteOrganizationUseCase()
 
-    const org = {
+    const orgData = {
         name: 'Fake Org Name',
         address: 'Orange Street, 123',
         city: 'São Paulo',
@@ -15,7 +15,7 @@ export async function createAndAuthenticateOrganization(app: FastifyInstance) {
         password: '123456',
     }
 
-    await registerUseCase.execute(org)
+    const { org } = await registerUseCase.execute(orgData)
 
     const { body } = await request(app.server).post('/auth').send({
         username: 'fakeorg',
