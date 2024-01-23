@@ -8,7 +8,7 @@ export class PrismaOrganizationsRepository implements OrganizationsRepository {
     }
 
     async findById(id: string): Promise<Organization | null> {
-        return await prisma.organization.findUnique({ where: { id } })
+        return await prisma.organization.findFirst({ where: { id } })
     }
 
     async findByUsername(username: string): Promise<Organization | null> {

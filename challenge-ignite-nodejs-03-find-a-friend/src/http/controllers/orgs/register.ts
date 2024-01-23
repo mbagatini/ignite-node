@@ -22,5 +22,5 @@ export async function register(
 
     await useCase.execute(data)
 
-    return await response.status(201).send()
+    response.status(201).send()
 }

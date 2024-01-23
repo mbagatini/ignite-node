@@ -8,7 +8,7 @@ Nesse desafio foi desenvolvida uma API para a adoção de animais, a Find A Frie
 
 ### Regras da aplicação
 
-[-] Deve ser possível cadastrar um pet
+[x] Deve ser possível cadastrar um pet
 [ ] Deve ser possível listar todos os pets disponíveis para adoção em uma cidade
 [ ] Deve ser possível filtrar pets por suas características
 [ ] Deve ser possível visualizar detalhes de um pet para adoção
@@ -20,7 +20,7 @@ Nesse desafio foi desenvolvida uma API para a adoção de animais, a Find A Frie
 [x] Para cadastrar um pet, a ORG precisa estar logada
 [ ] Para listar os pets, obrigatoriamente precisamos informar a cidade
 [x] Uma ORG precisa ter um endereço e um número de WhatsApp
-[ ] Um pet deve estar ligado a uma ORG
+[x] Um pet deve estar ligado a uma ORG
 [ ] O usuário que quer adotar, entrará em contato com a ORG via WhatsApp
 [ ] Todos os filtros, além da cidade, são opcionais
 [x] Para uma ORG acessar a aplicação como admin, ela precisa estar logada
