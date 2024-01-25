@@ -1,3 +1,5 @@
+import { type Organization } from './org'
+
 export interface Pet {
     id: string
     name: string
@@ -6,7 +8,9 @@ export interface Pet {
     size: 'small' | 'medium' | 'large'
     adopted: boolean
     adoptedAt?: Date | null
+
     orgId: string
+    org?: Organization
 }
 
-export type PetCreation = Omit<Pet, 'id'>
+export type PetCreation = Omit<Pet, 'id' | 'org'>

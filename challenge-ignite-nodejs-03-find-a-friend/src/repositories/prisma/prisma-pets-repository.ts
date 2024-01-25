@@ -1,5 +1,5 @@
 import { type Pet, type PetCreation } from '@/dto/pet'
-import { type PetsRepository } from '../pets-repository'
+import { type FindManyProps, type PetsRepository } from '../pets-repository'
 import { prisma } from '@/database/prisma'
 
 export class PrismaPetsRepository implements PetsRepository {
@@ -19,5 +19,26 @@ export class PrismaPetsRepository implements PetsRepository {
         })
 
         return (pet as Pet) ?? null
+    }
+
+    async findMany(filters: FindManyProps): Promise<Pet[]> {
+        const { city, size, age } = filters
+
+        const pets = await prisma.pet.findMany({
+            where: {
+                ...(size && { size }),
+                ...(age && { age }),
+                org: {
+                    city: {
+                        equals: city,
+                    },
+                },
+            },
+            include: {
+                org: true,
+            },
+        })
+
+        return pets as Pet[]
     }
 }
