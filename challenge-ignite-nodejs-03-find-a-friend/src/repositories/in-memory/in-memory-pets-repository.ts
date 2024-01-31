@@ -29,9 +29,9 @@ export class InMemoryPetsRepository implements PetsRepository {
     async findMany(filters: FindManyProps): Promise<Pet[]> {
         const { city, size, age } = filters
 
-        console.log(this.pets, city)
-
-        let pets = this.pets.filter((pet) => pet.org?.city.includes(city))
+        let pets = this.pets.filter(
+            (pet) => pet.org?.city.includes(city) && !pet.adopted,
+        )
 
         if (size) {
             pets = pets.filter((pet) => pet.size === String(size))

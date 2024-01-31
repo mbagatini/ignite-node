@@ -13,7 +13,7 @@ describe('Get Pet Details (e2e)', () => {
         await app.close()
     })
 
-    it('should be able to get a pet by', async () => {
+    it('should be able to get a pet by id', async () => {
         const { org } = await createAndAuthenticateOrganization(app)
 
         const createPetUsecase = makeCreatePetUseCase()

@@ -4,8 +4,8 @@ import { type PetsRepository } from '@/repositories/pets-repository'
 
 interface SearchPetsUseCaseProps {
     city: string
-    size?: Pet['size']
-    age?: number
+    size?: Pet['size'] | undefined
+    age?: number | undefined
 }
 
 export class SearchPetsUseCase {

@@ -16,6 +16,9 @@ export class PrismaPetsRepository implements PetsRepository {
             where: {
                 id,
             },
+            include: {
+                org: true,
+            },
         })
 
         return (pet as Pet) ?? null
@@ -26,6 +29,7 @@ export class PrismaPetsRepository implements PetsRepository {
 
         const pets = await prisma.pet.findMany({
             where: {
+                adopted: false,
                 ...(size && { size }),
                 ...(age && { age }),
                 org: {

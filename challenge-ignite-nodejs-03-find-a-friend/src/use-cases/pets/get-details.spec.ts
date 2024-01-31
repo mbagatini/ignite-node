@@ -1,15 +1,19 @@
 import { type PetsRepository } from '@/repositories/pets-repository'
+import { type OrganizationsRepository } from '@/repositories/orgs-repository'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { GetPetDetailsUseCase } from './get-details'
 import { InMemoryPetsRepository } from '@/repositories/in-memory/in-memory-pets-repository'
 import { NotFoundError } from '@/errors/not-found-error'
+import { InMemoryOrganizationsRepository } from '@/repositories/in-memory/in-memory-orgs-repository'
 
 describe('Get Pet Details Use Case', () => {
     let petsRepository: PetsRepository
+    let orgsRepository: OrganizationsRepository
     let sut: GetPetDetailsUseCase
 
     beforeEach(() => {
-        petsRepository = new InMemoryPetsRepository()
+        orgsRepository = new InMemoryOrganizationsRepository()
+        petsRepository = new InMemoryPetsRepository(orgsRepository)
         sut = new GetPetDetailsUseCase(petsRepository)
     })
 
