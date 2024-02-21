@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest run --dir src/domain/use-cases"
+    "test": "vitest run --dir src/domain/use-cases",
+	"test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
