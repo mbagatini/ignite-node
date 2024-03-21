@@ -4,8 +4,8 @@ export class Entity<T> {
 	private readonly _id: UniqueEntityID;
 	protected props: T;
 
-	constructor(props: T, id?: string) {
-		this._id = new UniqueEntityID(id);
+	protected constructor(props: T, id?: UniqueEntityID) {
+		this._id = id ?? new UniqueEntityID(id);
 		this.props = props;
 	}
 
