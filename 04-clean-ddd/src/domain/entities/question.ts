@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import { Entity } from "../../core/entities/entity"
 import { UniqueEntityID } from "../../core/entities/unique-entity-id"
 import { Optional } from "../../core/types/optional"
@@ -14,10 +15,11 @@ interface QuestionProps {
 }
 
 export class Question extends Entity<QuestionProps> {
-	static create(props: Optional<QuestionProps, 'createdAt'>, id?: UniqueEntityID) {
+	static create(props: Optional<QuestionProps, 'createdAt' | 'slug'>, id?: UniqueEntityID) {
 		const question = new Question({
 			...props,
-			createdAt: props.createdAt || new Date(),
+			slug: props.slug ?? Slug.createFromText(props.title),
+			createdAt: props.createdAt ?? new Date(),
 		}, id);
 
 		return question;
@@ -43,5 +45,19 @@ export class Question extends Entity<QuestionProps> {
 	}
 	get updatedAt() {
 		return this.props.updatedAt
+	}
+	get isNew() {
+		return dayjs().diff(this.createdAt, 'days') <= 3
+	}
+	get excerpt() {
+		return this.content.substring(0, 120).trimEnd().concat('...')
+	}
+
+	private touch() {
+		this.props.updatedAt = new Date()
+	}
+	set bestAnswerId(id: UniqueEntityID | undefined) {
+		this.props.bestAnswerId = id
+		this.touch()
 	}
 }
