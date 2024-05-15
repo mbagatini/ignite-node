@@ -7,6 +7,7 @@ interface CreateQuestionUseCaseRequest {
     title: string
     content: string
 }
+
 interface CreateQuestionUseCaseResponse {
     question: Question
 }
