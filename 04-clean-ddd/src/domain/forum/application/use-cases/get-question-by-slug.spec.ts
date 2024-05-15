@@ -1,10 +1,11 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { NotFoundError } from '@/core/errors/not-found-error'
+import { makeQuestion } from '@/test/factories/make-question'
+import { InMemoryQuestionsRepository } from '@/test/repositories/in-memory-questions-repository'
 import { beforeEach, describe, expect, test } from 'vitest'
 import { type QuestionsRepository } from '../repositories/questions-repository'
-import { InMemoryQuestionsRepository } from '@/test/repositories/in-memory-questions-repository'
 import { GetQuestionBySlugUseCase } from './get-question-by-slug'
-import { NotFoundError } from '@/core/errors/not-found-error'
-import { Question } from '../../enterprise/entities/question'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Slug } from '../../enterprise/entities/value-objects/slug'
 
 let inMemoryQuestionsRepository: QuestionsRepository
 let sut: GetQuestionBySlugUseCase
@@ -23,8 +24,9 @@ describe('Get Question by Slug Use Case', () => {
 
     test('should return the question if it exists', async () => {
         for (const iterator of [1, 2, 3]) {
-            const question = Question.create({
+            const question = makeQuestion({
                 authorId: new UniqueEntityID(iterator.toString()),
+                slug: Slug.create(`nova-pergunta-${iterator}`),
                 title: `Nova pergunta ${iterator}`,
                 content: 'Conteúdo da pergunta',
             })

@@ -5,6 +5,10 @@ export class Slug {
         this.value = value
     }
 
+    static create(value: string): Slug {
+        return new Slug(value)
+    }
+
     static createFromText(text: string): Slug {
         const slug = text
             .normalize('NFKD') // remove accents and special characters
