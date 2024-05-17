@@ -6,12 +6,13 @@
   "scripts": {
     "test": "vitest run --dir src/domain",
     "test:watch": "vitest",
-	"lint": "eslint --ext .ts src --fix"
+    "lint": "eslint --ext .ts src --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "eslint": "^8.57.0",
