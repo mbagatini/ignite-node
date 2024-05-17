@@ -1,6 +1,5 @@
 import { InMemoryAnswersRepository } from '@/test/repositories/in-memory-answers-repository'
-import { beforeEach } from 'node:test'
-import { describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 import { type AnswersRepository } from '../repositories/answers-repository'
 import { AnswerQuestionUseCase } from './answer-question'
 
