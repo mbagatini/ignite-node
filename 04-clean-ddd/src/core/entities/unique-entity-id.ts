@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 export class UniqueEntityID {
     private readonly value: string
 
-    get id(): string {
+    toString() {
         return this.value
     }
 
