@@ -8,11 +8,31 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
         this.questions.push(question)
     }
 
+    async delete(id: string): Promise<void> {
+        const index = this.questions.findIndex(
+            (question) => question.id.toString() !== id,
+        )
+
+        this.questions.splice(index, 1)
+    }
+
+    async getById(id: string): Promise<Question | null> {
+        const question = this.questions.find(
+            (question) => question.id.toString() === id,
+        )
+
+        return question ?? null
+    }
+
     async getBySlug(slug: string): Promise<Question | null> {
         const question = this.questions.find(
             (question) => question.slug.value === slug,
         )
 
         return question ?? null
+    }
+
+    async getAll(): Promise<Question[]> {
+        return this.questions
     }
 }
