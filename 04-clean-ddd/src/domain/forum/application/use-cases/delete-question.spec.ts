@@ -35,7 +35,7 @@ describe('Delete Question Use Case', () => {
         ).rejects.toThrow(UnauthorizedError)
     })
 
-    test('should return the question if it exists', async () => {
+    test('should delete the question if it exists', async () => {
         const question = makeQuestion(
             { authorId: new UniqueEntityID('1') },
             new UniqueEntityID('question-id'),
