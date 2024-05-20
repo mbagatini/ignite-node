@@ -35,12 +35,28 @@ export class Question extends Entity<QuestionProps> {
         return this.props.title
     }
 
+    set title(title: string) {
+        this.props.title = title
+        this.slug = Slug.createFromText(title)
+        this.touch()
+    }
+
     get slug() {
         return this.props.slug
     }
 
+    set slug(slug: Slug) {
+        this.props.slug = slug
+        this.touch()
+    }
+
     get content() {
         return this.props.content
+    }
+
+    set content(content: string) {
+        this.props.content = content
+        this.touch()
     }
 
     get authorId() {
