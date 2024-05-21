@@ -31,7 +31,7 @@ describe('List Recent Questions Use Case', () => {
         expect(result.questions[4].slug.value).toBe('question-1')
     })
 
-    test('should return paginated list of questions', async () => {
+    test('should return the list of questions paginated', async () => {
         let month = 7
         let day = 10
 

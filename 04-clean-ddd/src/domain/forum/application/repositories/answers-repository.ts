@@ -1,3 +1,4 @@
+import { type PaginationParams } from '@/core/repositories/pagination-params'
 import { type Answer } from '../../enterprise/entities/answer'
 
 export interface AnswersRepository {
@@ -6,4 +7,8 @@ export interface AnswersRepository {
     delete: (id: string) => Promise<void>
     getById: (id: string) => Promise<Answer | null>
     getAll: () => Promise<Answer[]>
+    getByQuestionId: (
+        questionId: string,
+        params: PaginationParams,
+    ) => Promise<Answer[]>
 }
