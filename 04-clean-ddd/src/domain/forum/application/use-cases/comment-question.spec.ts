@@ -11,7 +11,7 @@ let inMemoryQuestionsRepository: QuestionsRepository
 let inMemoryQuestionCommentsRepository: QuestionCommentsRepository
 let sut: CommentQuestionUseCase
 
-describe('Comment Question Use Case', () => {
+describe('Comment on Question Use Case', () => {
     beforeEach(() => {
         inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
         inMemoryQuestionCommentsRepository =
