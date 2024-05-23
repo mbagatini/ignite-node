@@ -26,9 +26,12 @@ describe('List Recent Questions Use Case', () => {
 
         const result = await sut.execute({ page: 1 })
 
-        expect(result.questions.length).toBe(5)
-        expect(result.questions[0].slug.value).toBe('question-5')
-        expect(result.questions[4].slug.value).toBe('question-1')
+        const { questions } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
+        expect(questions.length).toBe(5)
+        expect(questions[0].slug.value).toBe('question-5')
+        expect(questions[4].slug.value).toBe('question-1')
     })
 
     test('should return the list of questions paginated', async () => {
@@ -52,7 +55,11 @@ describe('List Recent Questions Use Case', () => {
 
         const result = await sut.execute({ page: 2 })
 
-        expect(result.questions.length).toBe(7)
-        expect(result.questions[6].slug.value).toBe('question-1')
+        const { questions } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
+
+        expect(questions.length).toBe(7)
+        expect(questions[6].slug.value).toBe('question-1')
     })
 })

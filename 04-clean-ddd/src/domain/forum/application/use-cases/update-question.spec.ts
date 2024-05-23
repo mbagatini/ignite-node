@@ -17,14 +17,15 @@ describe('Update Question Use Case', () => {
     })
 
     test('should throw error if the question does not exist', async () => {
-        await expect(
-            sut.execute({
-                questionId: 'non-existing-slug',
-                authorId: '1',
-                title: 'title',
-                content: 'content',
-            }),
-        ).rejects.toThrow(NotFoundError)
+        const result = await sut.execute({
+            questionId: 'non-existing-slug',
+            authorId: '1',
+            title: 'title',
+            content: 'content',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(NotFoundError)
     })
 
     test('should not be able to update a question from another user', async () => {
@@ -35,14 +36,15 @@ describe('Update Question Use Case', () => {
 
         await inMemoryQuestionsRepository.create(question)
 
-        await expect(
-            sut.execute({
-                questionId: 'question-id',
-                authorId: '2',
-                title: 'Example',
-                content: 'Some content to the question',
-            }),
-        ).rejects.toThrow(UnauthorizedError)
+        const result = await sut.execute({
+            questionId: 'question-id',
+            authorId: '2',
+            title: 'Example',
+            content: 'Some content to the question',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(UnauthorizedError)
     })
 
     test('should update the question if it exists', async () => {
@@ -53,13 +55,16 @@ describe('Update Question Use Case', () => {
 
         await inMemoryQuestionsRepository.create(question)
 
-        const { question: updatedQuestion } = await sut.execute({
+        const result = await sut.execute({
             questionId: 'question-1',
             authorId: '1',
             title: 'Poem',
             content: 'Roses are red, violets are blue',
         })
 
+        const { question: updatedQuestion } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
         expect(updatedQuestion).toMatchObject({
             title: 'Poem',
             content: 'Roses are red, violets are blue',

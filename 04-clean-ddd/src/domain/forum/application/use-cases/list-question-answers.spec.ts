@@ -24,9 +24,10 @@ describe('List Question Answers Use Case', () => {
     })
 
     test('should throw an error if the question does not exist', async () => {
-        const promise = sut.execute({ questionId: 'invalid-id', page: 1 })
+        const result = await sut.execute({ questionId: 'invalid-id', page: 1 })
 
-        await expect(promise).rejects.toThrow(NotFoundError)
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(NotFoundError)
     })
 
     test('should return the most recent questions', async () => {
@@ -47,7 +48,10 @@ describe('List Question Answers Use Case', () => {
             page: 1,
         })
 
-        expect(result.answers.length).toBe(5)
+        const { answers } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
+        expect(answers.length).toBe(5)
     })
 
     test('should return the list of answers paginated', async () => {
@@ -68,7 +72,10 @@ describe('List Question Answers Use Case', () => {
             page: 2,
         })
 
-        expect(result.answers.length).toBe(7)
-        expect(result.answers[6].authorId.toString()).toBe('author-27')
+        const { answers } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
+        expect(answers.length).toBe(7)
+        expect(answers[6].authorId.toString()).toBe('author-27')
     })
 })

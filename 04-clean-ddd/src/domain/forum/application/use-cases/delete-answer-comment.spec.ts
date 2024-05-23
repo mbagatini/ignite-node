@@ -19,9 +19,13 @@ describe('Delete Answer Comment Use Case', () => {
     })
 
     test('should throw error if the comment does not exist', async () => {
-        await expect(
-            sut.execute({ commentId: 'non-existing', authorId: '1' }),
-        ).rejects.toThrow(NotFoundError)
+        const result = await sut.execute({
+            commentId: 'non-existing',
+            authorId: '1',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(NotFoundError)
     })
 
     test('should not be able to delete a comment from another user', async () => {
@@ -32,9 +36,13 @@ describe('Delete Answer Comment Use Case', () => {
 
         await inMemoryAnswerCommentsRepository.create(comment)
 
-        await expect(
-            sut.execute({ commentId: 'comment-id', authorId: '2' }),
-        ).rejects.toThrow(UnauthorizedError)
+        const result = await sut.execute({
+            commentId: 'comment-id',
+            authorId: '2',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(UnauthorizedError)
     })
 
     test('should delete the comment if it exists', async () => {
@@ -45,10 +53,14 @@ describe('Delete Answer Comment Use Case', () => {
 
         await inMemoryAnswerCommentsRepository.create(comment)
 
-        await sut.execute({ commentId: 'comment-id', authorId: '1' })
+        const result = await sut.execute({
+            commentId: 'comment-id',
+            authorId: '1',
+        })
 
         const comments = await inMemoryAnswerCommentsRepository.getAll()
 
+        expect(result.isRight()).toBeTruthy()
         expect(comments).toHaveLength(0)
     })
 })

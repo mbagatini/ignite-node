@@ -26,9 +26,10 @@ describe('List Question Comments Use Case', () => {
     })
 
     test('should throw an error if the question does not exist', async () => {
-        const promise = sut.execute({ questionId: 'invalid-id', page: 1 })
+        const result = await sut.execute({ questionId: 'invalid-id', page: 1 })
 
-        await expect(promise).rejects.toThrow(NotFoundError)
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(NotFoundError)
     })
 
     test('should return the question comments', async () => {
@@ -49,7 +50,10 @@ describe('List Question Comments Use Case', () => {
             page: 1,
         })
 
-        expect(result.comments.length).toBe(5)
+        const { comments } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
+        expect(comments.length).toBe(5)
     })
 
     test('should return the list of comments paginated', async () => {
@@ -70,7 +74,10 @@ describe('List Question Comments Use Case', () => {
             page: 2,
         })
 
-        expect(result.comments.length).toBe(7)
-        expect(result.comments[6].authorId.toString()).toBe('author-27')
+        const { comments } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
+        expect(comments.length).toBe(7)
+        expect(comments[6].authorId.toString()).toBe('author-27')
     })
 })

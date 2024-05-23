@@ -1,3 +1,4 @@
+import { left, right, type Either } from '@/core/either'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { UnauthorizedError } from '@/core/errors/unauthorized-error'
 import { type Answer } from '../../enterprise/entities/answer'
@@ -10,10 +11,13 @@ interface ChooseQuestionBestAnswerUseCaseRequest {
     authorId: string
 }
 
-interface ChooseQuestionBestAnswerUseCaseResponse {
-    question: Question
-    answer: Answer
-}
+type ChooseQuestionBestAnswerUseCaseResponse = Either<
+    NotFoundError | UnauthorizedError,
+    {
+        question: Question
+        answer: Answer
+    }
+>
 
 export class ChooseQuestionBestAnswerUseCase {
     constructor(
@@ -28,7 +32,7 @@ export class ChooseQuestionBestAnswerUseCase {
         const answer = await this.answersRepository.getById(answerId)
 
         if (!answer) {
-            throw new NotFoundError('Answer not found')
+            return left(new NotFoundError('Answer not found'))
         }
 
         const question = await this.questionsRepository.getById(
@@ -36,12 +40,14 @@ export class ChooseQuestionBestAnswerUseCase {
         )
 
         if (!question) {
-            throw new NotFoundError('Question not found')
+            return left(new NotFoundError('Question not found'))
         }
 
         if (question.authorId.toString() !== authorId) {
-            throw new UnauthorizedError(
-                'You are not allowed to delete this answer',
+            return left(
+                new UnauthorizedError(
+                    'You are not allowed to delete this answer',
+                ),
             )
         }
 
@@ -49,6 +55,6 @@ export class ChooseQuestionBestAnswerUseCase {
 
         await this.questionsRepository.update(question)
 
-        return { answer, question }
+        return right({ answer, question })
     }
 }

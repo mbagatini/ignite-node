@@ -23,25 +23,29 @@ describe('Comment on Question Use Case', () => {
     })
 
     test('should throw an error if the question does not exist', async () => {
-        const promise = sut.execute({
+        const result = await sut.execute({
             authorId: '1',
             questionId: '1',
             content: 'Lorem ipsum dolor sit amet.',
         })
 
-        await expect(promise).rejects.toThrow(NotFoundError)
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(NotFoundError)
     })
 
     test('should be able to comment on a question', async () => {
         const question = makeQuestion()
         await inMemoryQuestionsRepository.create(question)
 
-        const { comment } = await sut.execute({
+        const result = await sut.execute({
             authorId: '1',
             questionId: question.id.toString(),
             content: 'Lorem ipsum dolor sit amet.',
         })
 
+        const { comment } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
         expect(comment.id).toBeTruthy()
     })
 })

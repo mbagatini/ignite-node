@@ -17,9 +17,13 @@ describe('Delete Answer Use Case', () => {
     })
 
     test('should throw error if the answer does not exist', async () => {
-        await expect(
-            sut.execute({ answerId: 'non-existing-slug', authorId: '1' }),
-        ).rejects.toThrow(NotFoundError)
+        const result = await sut.execute({
+            answerId: 'non-existing-slug',
+            authorId: '1',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(NotFoundError)
     })
 
     test('should not be able to delete a answer from another user', async () => {
@@ -30,9 +34,13 @@ describe('Delete Answer Use Case', () => {
 
         await inMemoryAnswersRepository.create(answer)
 
-        await expect(
-            sut.execute({ answerId: 'answer-id', authorId: '2' }),
-        ).rejects.toThrow(UnauthorizedError)
+        const result = await sut.execute({
+            answerId: 'answer-id',
+            authorId: '2',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(UnauthorizedError)
     })
 
     test('should return the answer if it exists', async () => {
@@ -43,10 +51,14 @@ describe('Delete Answer Use Case', () => {
 
         await inMemoryAnswersRepository.create(answer)
 
-        await sut.execute({ answerId: 'answer-id', authorId: '1' })
+        const result = await sut.execute({
+            answerId: 'answer-id',
+            authorId: '1',
+        })
 
         const answers = await inMemoryAnswersRepository.getAll()
 
+        expect(result.isRight()).toBeTruthy()
         expect(answers).toHaveLength(0)
     })
 })

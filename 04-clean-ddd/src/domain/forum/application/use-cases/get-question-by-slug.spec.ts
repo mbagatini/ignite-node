@@ -17,9 +17,10 @@ describe('Get Question by Slug Use Case', () => {
     })
 
     test('should throw error if the question does not exist', async () => {
-        await expect(sut.execute('non-existing-slug')).rejects.toThrow(
-            NotFoundError,
-        )
+        const result = await sut.execute('non-existing-slug')
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(NotFoundError)
     })
 
     test('should return the question if it exists', async () => {
@@ -36,6 +37,9 @@ describe('Get Question by Slug Use Case', () => {
 
         const result = await sut.execute('nova-pergunta-1')
 
-        expect(result.slug.value).toBe('nova-pergunta-1')
+        const { slug } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
+        expect(slug.value).toBe('nova-pergunta-1')
     })
 })

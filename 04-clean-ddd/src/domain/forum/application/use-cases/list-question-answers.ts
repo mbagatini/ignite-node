@@ -1,3 +1,4 @@
+import { left, right, type Either } from '@/core/either'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { type Answer } from '../../enterprise/entities/answer'
 import { type AnswersRepository } from '../repositories/answers-repository'
@@ -8,9 +9,12 @@ interface ListQuestionAnswersUseCaseRequest {
     page: number
 }
 
-interface ListQuestionAnswersUseCaseResponse {
-    answers: Answer[]
-}
+type ListQuestionAnswersUseCaseResponse = Either<
+    NotFoundError,
+    {
+        answers: Answer[]
+    }
+>
 
 export class ListQuestionAnswersUseCase {
     constructor(
@@ -26,7 +30,7 @@ export class ListQuestionAnswersUseCase {
         const question = await this.questionsRepository.getById(questionId)
 
         if (!question) {
-            throw new NotFoundError('Question not found')
+            return left(new NotFoundError('Question not found'))
         }
 
         const answers = await this.answersRepository.getByQuestionId(
@@ -34,6 +38,6 @@ export class ListQuestionAnswersUseCase {
             { page },
         )
 
-        return { answers }
+        return right({ answers })
     }
 }

@@ -1,6 +1,7 @@
-export class UnauthorizedError extends Error {
+import { type UseCaseError } from './use-case-error'
+
+export class UnauthorizedError extends Error implements UseCaseError {
     constructor(message: string) {
-        super(message)
-        this.name = 'UnauthorizedError'
+        super(message ?? 'Unauthorized')
     }
 }

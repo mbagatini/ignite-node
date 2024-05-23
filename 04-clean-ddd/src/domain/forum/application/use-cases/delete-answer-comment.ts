@@ -1,3 +1,4 @@
+import { left, right, type Either } from '@/core/either'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { UnauthorizedError } from '@/core/errors/unauthorized-error'
 import { type AnswerCommentsRepository } from '../repositories/answer-comments-repository'
@@ -7,6 +8,11 @@ interface DeleteAnswerCommentUseCaseRequest {
     commentId: string
 }
 
+type DeleteAnswerCommentUseCaseResponse = Either<
+    NotFoundError | UnauthorizedError,
+    null
+>
+
 export class DeleteAnswerCommentUseCase {
     constructor(
         private readonly answerCommentsRepository: AnswerCommentsRepository,
@@ -15,19 +21,23 @@ export class DeleteAnswerCommentUseCase {
     async execute({
         commentId,
         authorId,
-    }: DeleteAnswerCommentUseCaseRequest): Promise<void> {
+    }: DeleteAnswerCommentUseCaseRequest): Promise<DeleteAnswerCommentUseCaseResponse> {
         const comment = await this.answerCommentsRepository.getById(commentId)
 
         if (!comment) {
-            throw new NotFoundError('Comment not found')
+            return left(new NotFoundError('Comment not found'))
         }
 
         if (comment.authorId.toString() !== authorId) {
-            throw new UnauthorizedError(
-                'You are not allowed to delete this comment',
+            return left(
+                new UnauthorizedError(
+                    'You are not allowed to delete this comment',
+                ),
             )
         }
 
         await this.answerCommentsRepository.delete(commentId)
+
+        return right(null)
     }
 }

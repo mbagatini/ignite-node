@@ -2,15 +2,19 @@ import { NotFoundError } from '@/core/errors/not-found-error'
 import { type AnswerComment } from '../../enterprise/entities/answer-comment'
 import { type AnswerCommentsRepository } from '../repositories/answer-comments-repository'
 import { type AnswersRepository } from '../repositories/answers-repository'
+import { left, right, type Either } from '@/core/either'
 
 interface ListAnswerCommentsUseCaseRequest {
     answerId: string
     page: number
 }
 
-interface ListAnswerCommentsUseCaseResponse {
-    comments: AnswerComment[]
-}
+type ListAnswerCommentsUseCaseResponse = Either<
+    NotFoundError,
+    {
+        comments: AnswerComment[]
+    }
+>
 
 export class ListAnswerCommentsUseCase {
     constructor(
@@ -26,7 +30,7 @@ export class ListAnswerCommentsUseCase {
         const answer = await this.answersRepository.getById(answerId)
 
         if (!answer) {
-            throw new NotFoundError('Answer not found')
+            return left(new NotFoundError('Answer not found'))
         }
 
         const comments = await this.answerCommentsRepository.getByAnswerId(
@@ -34,6 +38,6 @@ export class ListAnswerCommentsUseCase {
             { page },
         )
 
-        return { comments }
+        return right({ comments })
     }
 }

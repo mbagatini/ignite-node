@@ -41,12 +41,13 @@ describe('Choose Question Best Answer Use Case', () => {
 
         await inMemoryAnswersRepository.create(answer)
 
-        await expect(
-            sut.execute({
-                answerId: answer.id.toString(),
-                authorId: 'author-2',
-            }),
-        ).rejects.toThrow(UnauthorizedError)
+        const result = await sut.execute({
+            answerId: answer.id.toString(),
+            authorId: 'author-2',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(UnauthorizedError)
     })
 
     test('should be able to choose the question best answer', async () => {
@@ -67,11 +68,14 @@ describe('Choose Question Best Answer Use Case', () => {
 
         await inMemoryAnswersRepository.create(answer)
 
-        const { question: updatedQuestion } = await sut.execute({
+        const result = await sut.execute({
             answerId: answer.id.toString(),
             authorId: question.authorId.toString(),
         })
 
+        const { question: updatedQuestion } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
         expect(updatedQuestion.bestAnswerId).toEqual(answer.id)
     })
 })

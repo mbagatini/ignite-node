@@ -13,12 +13,15 @@ describe('Answer Question Use Case', () => {
     })
 
     test('create an answer', async () => {
-        const { answer } = await sut.execute({
+        const result = await sut.execute({
             questionId: '1',
             instructorId: '1',
             content: 'Nova resposta',
         })
 
+        const { answer } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
         expect(answer.id).toBeTruthy()
     })
 })

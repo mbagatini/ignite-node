@@ -2,6 +2,7 @@ import { NotFoundError } from '@/core/errors/not-found-error'
 import { UnauthorizedError } from '@/core/errors/unauthorized-error'
 import { type QuestionsRepository } from '../repositories/questions-repository'
 import { type Question } from '../../enterprise/entities/question'
+import { type Either, left, right } from '@/core/either'
 
 interface UpdateQuestionUseCaseRequest {
     questionId: string
@@ -10,9 +11,12 @@ interface UpdateQuestionUseCaseRequest {
     content: string
 }
 
-interface UpdateQuestionUseCaseResponse {
-    question: Question
-}
+type UpdateQuestionUseCaseResponse = Either<
+    NotFoundError | UnauthorizedError,
+    {
+        question: Question
+    }
+>
 
 export class UpdateQuestionUseCase {
     constructor(private readonly questionsRepository: QuestionsRepository) {}
@@ -26,12 +30,14 @@ export class UpdateQuestionUseCase {
         const question = await this.questionsRepository.getById(questionId)
 
         if (!question) {
-            throw new NotFoundError('Question not found')
+            return left(new NotFoundError('Question not found'))
         }
 
         if (question.authorId.toString() !== authorId) {
-            throw new UnauthorizedError(
-                'You are not allowed to delete this question',
+            return left(
+                new UnauthorizedError(
+                    'You are not allowed to delete this question',
+                ),
             )
         }
 
@@ -40,6 +46,6 @@ export class UpdateQuestionUseCase {
 
         await this.questionsRepository.update(question)
 
-        return { question }
+        return right({ question })
     }
 }

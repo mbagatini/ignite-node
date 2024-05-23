@@ -17,13 +17,14 @@ describe('Update Answer Use Case', () => {
     })
 
     test('should throw error if the answer does not exist', async () => {
-        await expect(
-            sut.execute({
-                answerId: 'non-existing-slug',
-                authorId: '1',
-                content: 'content',
-            }),
-        ).rejects.toThrow(NotFoundError)
+        const result = await sut.execute({
+            answerId: 'non-existing-slug',
+            authorId: '1',
+            content: 'content',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(NotFoundError)
     })
 
     test('should not be able to update a answer from another user', async () => {
@@ -34,13 +35,14 @@ describe('Update Answer Use Case', () => {
 
         await inMemoryAnswersRepository.create(answer)
 
-        await expect(
-            sut.execute({
-                answerId: 'answer-id',
-                authorId: '2',
-                content: 'Some content to the answer',
-            }),
-        ).rejects.toThrow(UnauthorizedError)
+        const result = await sut.execute({
+            answerId: 'answer-id',
+            authorId: '2',
+            content: 'Some content to the answer',
+        })
+
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(UnauthorizedError)
     })
 
     test('should update the answer if it exists', async () => {
@@ -51,12 +53,15 @@ describe('Update Answer Use Case', () => {
 
         await inMemoryAnswersRepository.create(answer)
 
-        const { answer: updatedAnswer } = await sut.execute({
+        const result = await sut.execute({
             answerId: 'answer-1',
             authorId: '1',
             content: 'Roses are red, violets are blue',
         })
 
+        const { answer: updatedAnswer } = result.rightValue()
+
+        expect(result.isRight()).toBeTruthy()
         expect(updatedAnswer).toMatchObject({
             content: 'Roses are red, violets are blue',
         })
