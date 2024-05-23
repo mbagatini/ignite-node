@@ -4,9 +4,29 @@ import { type AnswerComment } from '@/domain/forum/enterprise/entities/answer-co
 export class InMemoryAnswerCommentsRepository
     implements AnswerCommentsRepository
 {
-    private readonly comments: AnswerComment[] = []
+    public comments: AnswerComment[] = []
 
     async create(comment: AnswerComment): Promise<void> {
         this.comments.push(comment)
+    }
+
+    async delete(id: string): Promise<void> {
+        const index = this.comments.findIndex(
+            (comment) => comment.id.toString() !== id,
+        )
+
+        this.comments.splice(index, 1)
+    }
+
+    async getById(id: string): Promise<AnswerComment | null> {
+        const comment = this.comments.find(
+            (comment) => comment.id.toString() === id,
+        )
+
+        return comment ?? null
+    }
+
+    async getAll(): Promise<AnswerComment[]> {
+        return this.comments
     }
 }
