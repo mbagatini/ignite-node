@@ -19,6 +19,12 @@ export class InMemoryQuestionCommentsRepository
         this.comments.splice(index, 1)
     }
 
+    async deleteByQuestionId(questionId: string): Promise<void> {
+        this.comments = this.comments.filter(
+            (comment) => comment.questionId.toString() !== questionId,
+        )
+    }
+
     async getById(id: string): Promise<QuestionComment | null> {
         const comment = this.comments.find(
             (comment) => comment.id.toString() === id,
