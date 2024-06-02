@@ -13,7 +13,7 @@ export class InMemoryQuestionCommentsRepository
 
     async delete(id: string): Promise<void> {
         const index = this.comments.findIndex(
-            (comment) => comment.id.toString() !== id,
+            (comment) => comment.id.toString() === id,
         )
 
         this.comments.splice(index, 1)
