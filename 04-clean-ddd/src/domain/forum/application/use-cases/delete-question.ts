@@ -4,6 +4,8 @@ import { UnauthorizedError } from '@/core/errors/unauthorized-error'
 import { type QuestionAttachmentsRepository } from '../repositories/question-attachments-repository'
 import { type QuestionCommentsRepository } from '../repositories/question-comments-repository'
 import { type QuestionsRepository } from '../repositories/questions-repository'
+import { type AnswersRepository } from '../repositories/answers-repository'
+import { type DeleteAnswerUseCase } from './delete-answer'
 
 interface DeleteQuestionUseCaseRequest {
     authorId: string
@@ -20,6 +22,8 @@ export class DeleteQuestionUseCase {
         private readonly questionsRepository: QuestionsRepository,
         private readonly questionCommentsRepository: QuestionCommentsRepository,
         private readonly questionAttachmentsRepository: QuestionAttachmentsRepository,
+        private readonly answersRepository: AnswersRepository,
+        private readonly deleteAnswerUseCase: DeleteAnswerUseCase,
     ) {}
 
     async execute({
@@ -43,6 +47,28 @@ export class DeleteQuestionUseCase {
         await this.questionsRepository.delete(questionId)
         await this.questionCommentsRepository.deleteByQuestionId(questionId)
         await this.questionAttachmentsRepository.deleteByQuestionId(questionId)
+
+        // Delete all answers from this question
+        let page = 1
+        do {
+            const answers = await this.answersRepository.getByQuestionId(
+                questionId,
+                { page },
+            )
+
+            for (const answer of answers) {
+                await this.deleteAnswerUseCase.execute({
+                    answerId: answer.id.toString(),
+                    authorId: answer.authorId.toString(),
+                })
+            }
+
+            if (answers.length === 0) {
+                page = 0
+            } else {
+                page++
+            }
+        } while (page > 0)
 
         return right(null)
     }
