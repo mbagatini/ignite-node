@@ -1,6 +1,7 @@
 import { left, right, type Either } from '@/core/either'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { UnauthorizedError } from '@/core/errors/unauthorized-error'
+import { type AnswerCommentsRepository } from '../repositories/answer-comments-repository'
 import { type AnswersRepository } from '../repositories/answers-repository'
 
 interface DeleteAnswerUseCaseRequest {
@@ -14,7 +15,10 @@ type DeleteAnswerUseCaseResponse = Either<
 >
 
 export class DeleteAnswerUseCase {
-    constructor(private readonly answersRepository: AnswersRepository) {}
+    constructor(
+        private readonly answersRepository: AnswersRepository,
+        private readonly answersCommentsRepository: AnswerCommentsRepository,
+    ) {}
 
     async execute({
         answerId,
@@ -35,6 +39,7 @@ export class DeleteAnswerUseCase {
         }
 
         await this.answersRepository.delete(answerId)
+        await this.answersCommentsRepository.deleteByAnswerId(answerId)
 
         return right(null)
     }
