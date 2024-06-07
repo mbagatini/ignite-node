@@ -6,14 +6,23 @@ import { InMemoryAnswersRepository } from '@/test/repositories/in-memory-answers
 import { beforeEach, describe, expect, test } from 'vitest'
 import { type AnswersRepository } from '../repositories/answers-repository'
 import { UpdateAnswerUseCase } from './update-answer'
+import { InMemoryAnswerAttachmentsRepository } from '@/test/repositories/in-memory-answer-attachments-repository'
+import { makeAnswerAttachment } from '@/test/factories/make-answer-attachments'
 
 let inMemoryAnswersRepository: AnswersRepository
+let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
 let sut: UpdateAnswerUseCase
 
 describe('Update Answer Use Case', () => {
     beforeEach(() => {
         inMemoryAnswersRepository = new InMemoryAnswersRepository()
-        sut = new UpdateAnswerUseCase(inMemoryAnswersRepository)
+        inMemoryAnswerAttachmentsRepository =
+            new InMemoryAnswerAttachmentsRepository()
+
+        sut = new UpdateAnswerUseCase(
+            inMemoryAnswersRepository,
+            inMemoryAnswerAttachmentsRepository,
+        )
     })
 
     test('should throw error if the answer does not exist', async () => {
@@ -65,5 +74,45 @@ describe('Update Answer Use Case', () => {
         expect(updatedAnswer).toMatchObject({
             content: 'Roses are red, violets are blue',
         })
+    })
+
+    test('should be able to update the answer attachments', async () => {
+        const answer = makeAnswer(
+            { authorId: new UniqueEntityID('1') },
+            new UniqueEntityID('answer-1'),
+        )
+
+        await inMemoryAnswersRepository.create(answer)
+
+        const attachments = ['1', '2'].map((attachmentId) => {
+            return makeAnswerAttachment(
+                {
+                    answerId: answer.id,
+                    link: `attachment-${attachmentId}`,
+                    title: `attachment-${attachmentId}`,
+                },
+                new UniqueEntityID(attachmentId),
+            )
+        })
+
+        inMemoryAnswerAttachmentsRepository.attachments.push(...attachments)
+
+        const result = await sut.execute({
+            answerId: 'answer-1',
+            authorId: '1',
+            content: 'Roses are red, violets are blue',
+            attachmentIds: ['2', '3'],
+        })
+
+        const { answer: updatedAnswer } = result.rightValue()
+
+        const attachmentsAfterUpdate = updatedAnswer.attachments.getItems()
+
+        expect(result.isRight()).toBeTruthy()
+        expect(attachmentsAfterUpdate.length).toBe(2)
+        expect(attachmentsAfterUpdate).toEqual([
+            expect.objectContaining({ id: new UniqueEntityID('2') }),
+            expect.objectContaining({ id: new UniqueEntityID('3') }),
+        ])
     })
 })

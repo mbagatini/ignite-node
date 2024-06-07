@@ -2,16 +2,18 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { UnauthorizedError } from '@/core/errors/unauthorized-error'
 import { makeAnswer } from '@/test/factories/make-answer'
+import { makeAnswerAttachment } from '@/test/factories/make-answer-attachments'
 import { makeAnswerComment } from '@/test/factories/make-answer-comment'
+import { InMemoryAnswerAttachmentsRepository } from '@/test/repositories/in-memory-answer-attachments-repository'
 import { InMemoryAnswerCommentsRepository } from '@/test/repositories/in-memory-answer-comments-repository'
 import { InMemoryAnswersRepository } from '@/test/repositories/in-memory-answers-repository'
 import { beforeEach, describe, expect, test } from 'vitest'
-import { type AnswerCommentsRepository } from '../repositories/answer-comments-repository'
 import { type AnswersRepository } from '../repositories/answers-repository'
 import { DeleteAnswerUseCase } from './delete-answer'
 
 let inMemoryAnswersRepository: AnswersRepository
-let inMemoryAnswerCommentsRepository: AnswerCommentsRepository
+let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
+let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
 let sut: DeleteAnswerUseCase
 
 describe('Delete Answer Use Case', () => {
@@ -19,10 +21,13 @@ describe('Delete Answer Use Case', () => {
         inMemoryAnswersRepository = new InMemoryAnswersRepository()
         inMemoryAnswerCommentsRepository =
             new InMemoryAnswerCommentsRepository()
+        inMemoryAnswerAttachmentsRepository =
+            new InMemoryAnswerAttachmentsRepository()
 
         sut = new DeleteAnswerUseCase(
             inMemoryAnswersRepository,
             inMemoryAnswerCommentsRepository,
+            inMemoryAnswerAttachmentsRepository,
         )
     })
 
@@ -72,7 +77,7 @@ describe('Delete Answer Use Case', () => {
         expect(answers).toHaveLength(0)
     })
 
-    test('should delete the answer and its comments', async () => {
+    test('should delete the answer and its related entities', async () => {
         const answer = makeAnswer(
             { authorId: new UniqueEntityID('1') },
             new UniqueEntityID('answer-id'),
@@ -90,6 +95,21 @@ describe('Delete Answer Use Case', () => {
             await inMemoryAnswerCommentsRepository.create(comment)
         }
 
+        // attachments
+        const attachments = ['1', '2'].map((attachmentId) => {
+            return makeAnswerAttachment(
+                {
+                    answerId: answer.id,
+                    link: `attachment-${attachmentId}`,
+                    title: `attachment-${attachmentId}`,
+                },
+                new UniqueEntityID(attachmentId),
+            )
+        })
+
+        inMemoryAnswerAttachmentsRepository.attachments.push(...attachments)
+
+        // sut
         const result = await sut.execute({
             answerId: 'answer-id',
             authorId: '1',
@@ -99,5 +119,8 @@ describe('Delete Answer Use Case', () => {
 
         expect(result.isRight()).toBeTruthy()
         expect(answers).toHaveLength(0)
+
+        expect(inMemoryAnswerCommentsRepository.comments).toHaveLength(0)
+        expect(inMemoryAnswerAttachmentsRepository.attachments).toHaveLength(0)
     })
 })

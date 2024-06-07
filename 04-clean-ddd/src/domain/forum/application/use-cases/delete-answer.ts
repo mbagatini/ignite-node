@@ -3,6 +3,7 @@ import { NotFoundError } from '@/core/errors/not-found-error'
 import { UnauthorizedError } from '@/core/errors/unauthorized-error'
 import { type AnswerCommentsRepository } from '../repositories/answer-comments-repository'
 import { type AnswersRepository } from '../repositories/answers-repository'
+import { type AnswerAttachmentsRepository } from '../repositories/answer-attachments-repository'
 
 interface DeleteAnswerUseCaseRequest {
     authorId: string
@@ -18,6 +19,7 @@ export class DeleteAnswerUseCase {
     constructor(
         private readonly answersRepository: AnswersRepository,
         private readonly answersCommentsRepository: AnswerCommentsRepository,
+        private readonly answerAttachmentsRepository: AnswerAttachmentsRepository,
     ) {}
 
     async execute({
@@ -40,6 +42,7 @@ export class DeleteAnswerUseCase {
 
         await this.answersRepository.delete(answerId)
         await this.answersCommentsRepository.deleteByAnswerId(answerId)
+        await this.answerAttachmentsRepository.deleteByAnswerId(answerId)
 
         return right(null)
     }

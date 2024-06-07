@@ -5,6 +5,7 @@ import { makeAnswer } from '@/test/factories/make-answer'
 import { makeQuestion } from '@/test/factories/make-question'
 import { makeQuestionAttachment } from '@/test/factories/make-question-attachments'
 import { makeQuestionComment } from '@/test/factories/make-question-comment'
+import { InMemoryAnswerAttachmentsRepository } from '@/test/repositories/in-memory-answer-attachments-repository'
 import { InMemoryAnswerCommentsRepository } from '@/test/repositories/in-memory-answer-comments-repository'
 import { InMemoryAnswersRepository } from '@/test/repositories/in-memory-answers-repository'
 import { InMemoryQuestionAttachmentsRepository } from '@/test/repositories/in-memory-question-attachments-repository'
@@ -23,6 +24,7 @@ let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
 
 let inMemoryAnswersRepository: AnswersRepository
 let inMemoryAnswerCommentsRepository: AnswerCommentsRepository
+let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
 
 let deleteAnswerUseCase: DeleteAnswerUseCase
 let sut: DeleteQuestionUseCase
@@ -38,10 +40,13 @@ describe('Delete Question Use Case', () => {
         inMemoryAnswersRepository = new InMemoryAnswersRepository()
         inMemoryAnswerCommentsRepository =
             new InMemoryAnswerCommentsRepository()
+        inMemoryAnswerAttachmentsRepository =
+            new InMemoryAnswerAttachmentsRepository()
 
         deleteAnswerUseCase = new DeleteAnswerUseCase(
             inMemoryAnswersRepository,
             inMemoryAnswerCommentsRepository,
+            inMemoryAnswerAttachmentsRepository,
         )
 
         sut = new DeleteQuestionUseCase(
