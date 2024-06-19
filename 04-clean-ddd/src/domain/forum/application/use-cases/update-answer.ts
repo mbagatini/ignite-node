@@ -1,12 +1,13 @@
+import { left, right, type Either } from '@/core/either'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { UnauthorizedError } from '@/core/errors/unauthorized-error'
-import { type AnswersRepository } from '../repositories/answers-repository'
+import { DomainEvents } from '@/core/events/domain-events'
 import { type Answer } from '../../enterprise/entities/answer'
-import { left, right, type Either } from '@/core/either'
-import { type AnswerAttachmentsRepository } from '../repositories/answer-attachments-repository'
-import { AnswerAttachmentList } from '../../enterprise/entities/answer-attachment-list'
 import { AnswerAttachment } from '../../enterprise/entities/answer-attachment'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { AnswerAttachmentList } from '../../enterprise/entities/answer-attachment-list'
+import { type AnswerAttachmentsRepository } from '../repositories/answer-attachments-repository'
+import { type AnswersRepository } from '../repositories/answers-repository'
 
 interface UpdateAnswerUseCaseRequest {
     answerId: string
@@ -75,6 +76,9 @@ export class UpdateAnswerUseCase {
         answer.content = content
 
         await this.answersRepository.update(answer)
+
+        // trigger notification
+        DomainEvents.dispatchEventsForAggregate(answer.id)
 
         return right({ answer })
     }

@@ -4,6 +4,7 @@ import { Answer } from '../../enterprise/entities/answer'
 import { right, type Either } from '@/core/either'
 import { AnswerAttachment } from '../../enterprise/entities/answer-attachment'
 import { AnswerAttachmentList } from '../../enterprise/entities/answer-attachment-list'
+import { DomainEvents } from '@/core/events/domain-events'
 
 interface AnswerQuestionUseCaseRequest {
     instructorId: string
@@ -45,6 +46,9 @@ export class AnswerQuestionUseCase {
         }
 
         await this.answersRepository.create(answer)
+
+        // trigger notification
+        DomainEvents.dispatchEventsForAggregate(answer.id)
 
         return right({ answer })
     }
