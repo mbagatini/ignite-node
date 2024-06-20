@@ -43,7 +43,7 @@ describe('On Answer Created Subscriber', () => {
 
         const sut = new AnswerQuestionUseCase(inMemoryAnswersRepository)
 
-        const notificatioinSpy = vi.spyOn(sendNotificationUseCase, 'execute')
+        const notificationSpy = vi.spyOn(sendNotificationUseCase, 'execute')
 
         const question = makeQuestion()
         const answer = makeAnswer({ questionId: question.id })
@@ -60,12 +60,12 @@ describe('On Answer Created Subscriber', () => {
         expect(response.isRight()).toBeTruthy()
 
         await vi.waitFor(() => {
-            expect(notificatioinSpy).toHaveBeenCalled()
+            expect(notificationSpy).toHaveBeenCalled()
         })
     })
 
     test('should send a notification when an answer is updated', async () => {
-        const notificatioinSpy = vi.spyOn(sendNotificationUseCase, 'execute')
+        const notificationSpy = vi.spyOn(sendNotificationUseCase, 'execute')
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const subscriber = new OnAnswerCreated(
@@ -94,7 +94,7 @@ describe('On Answer Created Subscriber', () => {
         expect(response.isRight()).toBeTruthy()
 
         await vi.waitFor(() => {
-            expect(notificatioinSpy).toHaveBeenCalled()
+            expect(notificationSpy).toHaveBeenCalled()
         })
     })
 })

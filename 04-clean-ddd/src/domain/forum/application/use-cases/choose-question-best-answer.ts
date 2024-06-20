@@ -1,6 +1,7 @@
 import { left, right, type Either } from '@/core/either'
 import { NotFoundError } from '@/core/errors/not-found-error'
 import { UnauthorizedError } from '@/core/errors/unauthorized-error'
+import { DomainEvents } from '@/core/events/domain-events'
 import { type Answer } from '../../enterprise/entities/answer'
 import { type Question } from '../../enterprise/entities/question'
 import { type AnswersRepository } from '../repositories/answers-repository'
@@ -54,6 +55,9 @@ export class ChooseQuestionBestAnswerUseCase {
         question.bestAnswerId = answer.id
 
         await this.questionsRepository.update(question)
+
+        // trigger notification
+        DomainEvents.dispatchEventsForAggregate(question.id)
 
         return right({ answer, question })
     }
