@@ -1,8 +1,10 @@
 import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type Optional } from '@/core/types/optional'
+import { AnswerCommentedEvent } from '../events/answer-commented-event'
 import { AnswerCreatedEvent } from '../events/answer-created-event'
 import { AnswerAttachmentList } from './answer-attachment-list'
+import { type AnswerComment } from './answer-comment'
 
 export interface AnswerProps {
     content: string
@@ -75,5 +77,9 @@ export class Answer extends AggregateRoot<AnswerProps> {
 
     private touch() {
         this.props.updatedAt = new Date()
+    }
+
+    public onCommented(comment: AnswerComment) {
+        this.addDomainEvent(new AnswerCommentedEvent(this, comment))
     }
 }

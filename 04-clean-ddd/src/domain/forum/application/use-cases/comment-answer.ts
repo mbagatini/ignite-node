@@ -1,6 +1,7 @@
 import { left, right, type Either } from '@/core/either'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotFoundError } from '@/core/errors/not-found-error'
+import { DomainEvents } from '@/core/events/domain-events'
 import { AnswerComment } from '../../enterprise/entities/answer-comment'
 import { type AnswerCommentsRepository } from '../repositories/answer-comments-repository'
 import { type AnswersRepository } from '../repositories/answers-repository'
@@ -37,9 +38,13 @@ export class CommentAnswerUseCase {
             content,
             authorId: new UniqueEntityID(authorId),
             answerId: new UniqueEntityID(answerId),
+            answer,
         })
 
         await this.answerCommentsRepository.create(comment)
+
+        // trigger notification
+        DomainEvents.dispatchEventsForAggregate(answer.id)
 
         return right({ comment })
     }
