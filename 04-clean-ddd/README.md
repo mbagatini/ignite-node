@@ -25,7 +25,7 @@ Forum app.
 - [x] Deve ser possível apagar um comentário de uma resposta;
 - [x] Deve ser possível listar todos os comentários de uma pergunta;
 - [x] Deve ser possível listar todos os comentários de uma resposta;
-- [ ] O sistema deve notificar o autor da pergunta quando alguém comentar nela;
+- [x] O sistema deve notificar o autor da pergunta quando alguém comentar nela;
 - [x] O sistema deve notificar o autor da resposta quando alguém comentar nela;
 - [x] O sistema deve marcar uma notificação como lida quando o usuário acessar a notificação;
 
