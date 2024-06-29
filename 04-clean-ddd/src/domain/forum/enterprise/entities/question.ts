@@ -5,6 +5,8 @@ import dayjs from 'dayjs'
 import { QuestionBestAnswerChosenEvent } from '../events/question-best-answer-chosen'
 import { QuestionAttachmentList } from './question-attachment-list'
 import { Slug } from './value-objects/slug'
+import { type QuestionComment } from './question-comment'
+import { QuestionCommentedEvent } from '../events/question-commented-event'
 
 export interface QuestionProps {
     title: string
@@ -112,5 +114,9 @@ export class Question extends AggregateRoot<QuestionProps> {
 
     private touch() {
         this.props.updatedAt = new Date()
+    }
+
+    public onCommented(comment: QuestionComment) {
+        this.addDomainEvent(new QuestionCommentedEvent(this, comment))
     }
 }

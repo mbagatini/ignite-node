@@ -4,6 +4,7 @@ import { NotFoundError } from '@/core/errors/not-found-error'
 import { QuestionComment } from '../../enterprise/entities/question-comment'
 import { type QuestionCommentsRepository } from '../repositories/question-comments-repository'
 import { type QuestionsRepository } from '../repositories/questions-repository'
+import { DomainEvents } from '@/core/events/domain-events'
 
 interface CommentQuestionUseCaseRequest {
     authorId: string
@@ -39,9 +40,13 @@ export class CommentQuestionUseCase {
             content,
             authorId: new UniqueEntityID(authorId),
             questionId: new UniqueEntityID(questionId),
+            question,
         })
 
         await this.questionCommentsRepository.create(comment)
+
+        // trigger notification
+        DomainEvents.dispatchEventsForAggregate(question.id)
 
         return right({ comment })
     }
