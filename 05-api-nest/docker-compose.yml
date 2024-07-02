@@ -10,6 +10,5 @@ services:
       - POSTGRESQL_USERNAME=docker
       - POSTGRESQL_PASSWORD=happydocker
       - POSTGRESQL_DATABASE=api-nest
-      - POSTGRESQL_DATA_DIR=/data/postgresql
     volumes:
-      - ./data/pg:/data/postgresql
+      - ./data/pg:/bitnami/postgresql
