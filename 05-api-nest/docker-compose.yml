@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  postgresql:
+    container_name: 'postgresql-nest'
+    image: 'bitnami/postgresql:latest'
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=happydocker
+      - POSTGRESQL_DATABASE=api-nest
+      - POSTGRESQL_DATA_DIR=/data/postgresql
+    volumes:
+      - ./data/pg:/data/postgresql
