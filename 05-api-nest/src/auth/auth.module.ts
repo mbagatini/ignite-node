@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
+      global: true,
       useFactory(configService: ConfigService<Env, true>) {
         const jwtPrivateKey = configService.get('JWT_PRIVATE_KEY', {
           infer: true,
@@ -20,8 +21,8 @@ import { JwtStrategy } from './jwt.strategy';
 
         return {
           signOptions: { algorithm: 'RS256' },
-          jwtPrivateKey: Buffer.from(jwtPrivateKey, 'base64'),
-          jwtPublicKey: Buffer.from(jwtPublicKey, 'base64'),
+          privateKey: Buffer.from(jwtPrivateKey, 'base64'),
+          publicKey: Buffer.from(jwtPublicKey, 'base64'),
         };
       },
     }),
