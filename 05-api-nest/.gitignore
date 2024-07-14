@@ -18,6 +18,9 @@ data
 # OS
 .DS_Store
 
+# SSH
+*.key
+
 # Tests
 /coverage
 /.nyc_output
