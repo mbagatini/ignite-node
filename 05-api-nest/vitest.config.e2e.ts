@@ -9,6 +9,7 @@ export default defineConfig({
     alias: {
       '@test': './test',
     },
+    setupFiles: ['./test/setup.e2e.ts'],
   },
   resolve: {
     alias: {
